@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image"; // Import Next.js Image component
+
 import axios from "axios";
 import { motion } from "framer-motion";
 
@@ -100,7 +102,7 @@ const MatchData: React.FC = () => {
         setError("Error fetching setup data.");
         setLoading(false);
       });
-  }, []);
+  }, [urlSetupData]); // Add urlSetupData to the dependency array
 
   useEffect(() => {
     if (currentPage === 1) {
@@ -184,12 +186,14 @@ const MatchData: React.FC = () => {
                                   key={index}
                                   className="w-[340px] h-[300px] relative top-[56px] right-[30px] z-0 mr-[-120px]"
                                 >
-                                  <img
+                                  <Image
                                     src={
                                       photo ||
                                       "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
                                     }
                                     alt={`Player ${index + 1}`}
+                                    layout="fill"
+                                    objectFit="cover" // You can use objectFit like 'cover' or 'contain'
                                     className="w-full h-full"
                                   />
                                 </div>
@@ -202,10 +206,12 @@ const MatchData: React.FC = () => {
                                     key={index}
                                     className="w-[340px] h-[300px] relative top-[56px] right-[30px] z-0 mr-[-120px]"
                                   >
-                                    <img
+                                    <Image
                                       src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
                                       alt={`Default Player ${index + 1}`}
                                       className="w-full h-full"
+                                      layout="fill"
+                                      objectFit="cover" // You can use objectFit like 'cover' or 'contain'
                                     />
                                   </div>
                                 ))}
@@ -216,14 +222,15 @@ const MatchData: React.FC = () => {
                           className="bg-red-800 w-[490px] h-[130px] relative left-[100px] top-[187px]"
                           style={{ backgroundColor: primaryColor }}
                         >
-                          <div className="w-[140px] h-[140px] ">
-                            <img
+                          <div className="w-[160px] h-[140px] relative top-[-13px] ">
+                            <Image
                               src={
                                 team.team_logo ||
                                 "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
                               }
-                              alt=""
-                              className=""
+                              alt="logo"
+                              width={220}
+                              height={220}
                             />
                           </div>
                           <div className="w-[2px] h-[110px] bg-white relative left-[140px] bottom-[130px]"></div>
@@ -232,9 +239,12 @@ const MatchData: React.FC = () => {
                           </div>
                           {team.chicken === 1 ? (
                             <div className="w-[80px] h-[80px] relative bottom-[380px] left-[400px]">
-                              <img
+                              <Image
                                 src="https://res.cloudinary.com/dqckienxj/image/upload/v1735721889/roast-chicken_kjcdkw.png"
                                 alt=""
+                                className="w-full h-full"
+                                layout="fill"
+                                objectFit="cover" // You can use objectFit like 'cover' or 'contain'
                               />
                             </div>
                           ) : (
@@ -298,21 +308,27 @@ const MatchData: React.FC = () => {
                   </div>
                   <div className="w-[392px] h-[80px] bg-[#000000bc] flex">
                     <div className="w-[90px] h-[90px] relative left-[5px]">
-                      <img
+                      <Image
                         src={
                           team.team_logo ||
                           "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
                         }
+                        layout="fill"
+                        objectFit="cover" // You can use objectFit like 'cover' or 'contain'
                         alt=""
+                        className="w-full h-full"
                       />
                     </div>
                     <div className="w-[2px] h-[68px] bg-white mt-[5px]"></div>
                     <div className="ml-[8px]">{team.team_name}</div>
                     {team.chicken === 1 ? (
                       <div className="w-[65px] h-[65x] relative top-[6px] left-[90px] ">
-                        <img
+                        <Image
                           src="https://res.cloudinary.com/dqckienxj/image/upload/v1735721889/roast-chicken_kjcdkw.png"
-                          alt="img"
+                          layout="fill"
+                          objectFit="cover" // You can use objectFit like 'cover' or 'contain'
+                          alt="Image"
+                          className="w-full h-full"
                         />
                       </div>
                     ) : (
@@ -377,21 +393,27 @@ const MatchData: React.FC = () => {
                 </div>
                 <div className="w-[392px] h-[80px] bg-[#000000bc] flex">
                   <div className="w-[90px] h-[90px] relative left-[5px]">
-                    <img
+                    <Image
                       src={
                         team.team_logo ||
                         "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
                       }
-                      alt=""
+                      className="w-full h-full"
+                      layout="fill"
+                      objectFit="cover" // You can use objectFit like 'cover' or 'contain'
+                      alt="Image"
                     />
                   </div>
                   <div className="w-[2px] h-[68px] bg-white mt-[5px]"></div>
                   <div className="ml-[8px]">{team.team_name}</div>
                   {team.chicken === 1 ? (
                     <div className="w-[65px] h-[65px] relative top-[6px] left-[150px]">
-                      <img
+                      <Image
                         src="https://res.cloudinary.com/dqckienxj/image/upload/v1735721889/roast-chicken_kjcdkw.png"
-                        alt="img"
+                        alt="Image"
+                        className="w-full h-full"
+                        layout="fill"
+                        objectFit="cover" // You can use objectFit like 'cover' or 'contain'
                       />
                     </div>
                   ) : (
