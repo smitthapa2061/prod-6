@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import Image from "next/image"; // Import Image from next/image
 
 // Define types for player data and response from the API
 interface Player {
@@ -145,24 +146,26 @@ const Dom: React.FC = () => {
                 className="bg-red-800 w-[90px] h-[90px] absolute mt-[320px] ml-[250px] z-10"
                 style={{ backgroundColor: primaryColor }}
               >
-                <img
+                <Image
                   src={
                     playerMilestone.team_logo ||
                     "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
                   }
                   alt="Team Logo"
-                  className="w-[100%] h-[100%]"
+                  layout="fill" // Automatically adjusts the image size
+                  objectFit="contain" // Ensures the image fits within its container
                 />
               </div>
               <div className="w-[300px] h-[350px] bg-[#000000b5] mt-[360px] absolute z-0">
                 <div className="w-[370px] h-[340px] absolute right-[-30px] mt-[10px]">
-                  <img
+                  <Image
                     src={
                       playerMilestone.player_photo ||
                       "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
                     }
                     alt="Player"
-                    className="w-[100%] h-[100%]"
+                    layout="fill" // Automatically adjusts the image size
+                    objectFit="contain" // Ensures the image fits within its container
                   />
                 </div>
               </div>

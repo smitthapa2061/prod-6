@@ -1,9 +1,9 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import LiveStats from "../Stats/LiveStats";
 import OverAllStats from "../Stats/OverallStats";
+
 interface DataItem {
   ColumnA: string;
   ColumnB: string;
@@ -37,10 +37,9 @@ const Controller: React.FC = () => {
         console.log("Fetched Data:", formattedData);
         setData(formattedData);
         setError(null);
-      } catch (err: any) {
-        const errorMessage = `Error fetching data: ${
-          err.response?.data?.error?.message || err.message
-        }`;
+      } catch (err) {
+        // Assert the error as an instance of Error
+        const errorMessage = (err as Error).message || "Unknown error";
         console.error(errorMessage);
         setError(errorMessage);
       } finally {
