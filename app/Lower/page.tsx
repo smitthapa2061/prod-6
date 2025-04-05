@@ -1,7 +1,6 @@
-"use clinet";
 // This is a full server component
 import React from "react";
-
+import Image from "next/image"; // Make sure you import Image from Next.js
 // Define types for the data structure
 interface LowerData {
   TOR_NAME: string;
@@ -67,7 +66,7 @@ const Lower = async () => {
             className="bg-[#8a110f] border-4 border-black w-[8rem] h-[8rem] flex items-center justify-center"
             style={{ backgroundColor: `${data.PRIMARY_COLOR}` }}
           >
-            <img
+            <Image
               src={data.TOR_LOGO}
               alt="Tournament Logo"
               className="transform rotate-[-45deg] w-full h-full p-2"

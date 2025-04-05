@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import Image from "next/image"; // Import Next.js Image component
 
 // Define types for the data structure
 interface TeamData {
@@ -11,9 +12,6 @@ interface TeamData {
   totalpoints: number;
 }
 
-interface SetupData {
-  PRIMARY_COLOR: string;
-}
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
 const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
 const range = "overall1!A2:G25"; // Range for overall data
@@ -25,7 +23,6 @@ const fadeInAnimation = {
 };
 
 const Champions: React.FC = () => {
-  const [data, setData] = useState<TeamData[]>([]); // Array of team data
   const [top1, setTop1] = useState<TeamData | null>(null); // Top team data (null initially)
   const [primaryColor, setPrimaryColor] = useState<string>("#FF0000"); // Default red color
   const [error, setError] = useState<string | null>(null); // Error message state
@@ -54,7 +51,11 @@ const Champions: React.FC = () => {
             index === self.findIndex((t) => t.teamTag === value.teamTag)
         );
 
-        setData(uniqueTeams);
+        // Set top 1 data
+        const sortedData = uniqueTeams.sort(
+          (a, b) => b.totalpoints - a.totalpoints
+        );
+        setTop1(sortedData[0]); // Assuming the top team is the one with the highest total points
 
         // Fetch primary color data
         const url2 = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range2}?key=${apiKey}`;
@@ -68,12 +69,6 @@ const Champions: React.FC = () => {
         if (primaryColorValue) {
           setPrimaryColor(primaryColorValue[1] || "#FF0000"); // Fallback to red if no color found
         }
-
-        // Set top 1 data
-        const sortedData = uniqueTeams.sort(
-          (a, b) => b.totalpoints - a.totalpoints
-        );
-        setTop1(sortedData[0]); // Assuming the top team is the one with the highest total points
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
       }
@@ -101,38 +96,58 @@ const Champions: React.FC = () => {
           style={{ position: "relative" }}
         >
           <div className="h-[1080px] flex w-[1920px] items-start top-[120px] relative ">
-            <motion.img
+            <motion.div
               initial={{ x: -800 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.5 }}
               className="w-[800px] relative right-[116px] "
-              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-              alt="Team Image"
-            />
-            <motion.img
+            >
+              <Image
+                src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+                alt="Team Image"
+                width={800}
+                height={800}
+              />
+            </motion.div>
+            <motion.div
               initial={{ x: -800 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.5 }}
               className="w-[800px] relative right-[424px]"
-              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-              alt="Team Image"
-            />
-            <motion.img
+            >
+              <Image
+                src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+                alt="Team Image"
+                width={800}
+                height={800}
+              />
+            </motion.div>
+            <motion.div
               initial={{ x: -800 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.5 }}
               className="w-[800px] relative right-[800px]"
-              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-              alt="Player Image"
-            />
-            <motion.img
+            >
+              <Image
+                src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+                alt="Player Image"
+                width={800}
+                height={800}
+              />
+            </motion.div>
+            <motion.div
               initial={{ x: -800 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.5 }}
               className="w-[800px] relative right-[1108px]"
-              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-              alt="Player Image"
-            />
+            >
+              <Image
+                src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+                alt="Player Image"
+                width={800}
+                height={800}
+              />
+            </motion.div>
           </div>
           <div className="relative bottom-[300px]">
             <div>
@@ -152,13 +167,12 @@ const Champions: React.FC = () => {
                   <div className="flex justify-center font-[300] items-start text-6xl text-white font-teko">
                     {top1.teamTag}
                   </div>
-                  <img
+                  <Image
                     className="relative left-3 h-[230px]"
-                    src={
-                      top1.teamLogo ||
-                      "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
-                    }
+                    src={top1.teamLogo}
                     alt="Team Logo"
+                    width={230}
+                    height={230}
                   />
                 </div>
               </div>

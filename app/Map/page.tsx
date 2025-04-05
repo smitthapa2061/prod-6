@@ -1,5 +1,5 @@
 import React from "react";
-
+import Image from "next/image"; // Make sure you import Image from Next.js
 // Google Sheets API details
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
 const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
@@ -79,7 +79,7 @@ const Map = async () => {
               style={{ backgroundColor: primaryColor }}
             >
               <div className="w-[230px] h-[120px] flex justify-center absolute top-[2px] left-[0px]">
-                <img
+                <Image
                   src={
                     row.ColumnC ||
                     "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
@@ -112,7 +112,7 @@ const Map = async () => {
               style={{ backgroundColor: primaryColor }}
             >
               <div className="w-[230px] h-[120px] flex justify-center absolute top-[2px] left-[0px]">
-                <img
+                <Image
                   src={
                     row.ColumnC ||
                     "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
