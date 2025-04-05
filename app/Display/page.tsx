@@ -22,7 +22,6 @@ const Controller: React.FC = () => {
   const [data, setData] = useState<DisplayRow[]>([]);
   const [nextData, setNextData] = useState<DisplayRow[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws"; // Google Sheets API key
   const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo"; // Google Sheets ID
@@ -44,14 +43,13 @@ const Controller: React.FC = () => {
 
         setNextData(formattedData);
         setError(null);
-      } catch (err: any) {
+      } catch (err) {
         const errorMessage = `Error fetching data: ${
-          err.response?.data?.error?.message || err.message
+          (err as { response?: { data: { error: { message: string } } } })
+            .response?.data?.error?.message || (err as Error).message
         }`;
         console.error(errorMessage);
         setError(errorMessage);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -62,7 +60,7 @@ const Controller: React.FC = () => {
       clearInterval(interval);
       console.log("Fetching stopped: Component unmounted.");
     };
-  }, []);
+  }, [SHEET_API]); // Added SHEET_API to the dependency array
 
   useEffect(() => {
     if (nextData.length > 0) {
