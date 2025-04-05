@@ -8,6 +8,11 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        "bebas-neue": ["Bebas Neue", "sans-serif"],
+        "gemunu-libre": ["Gemunu Libre", "sans-serif"],
+        teko: ["Teko", "sans-serif"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
