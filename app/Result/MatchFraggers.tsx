@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import Image from "next/image"; // Importing Next.js Image component
 
 // Define types for match fragger and setup data
 interface MatchFraggerData {
@@ -55,12 +56,11 @@ const MatchFragger: React.FC = () => {
         }
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setError("Error fetching data.");
         setLoading(false);
       });
 
-    // Fetch additional match info
     // Fetch additional match info
     const fetchData2 = async () => {
       try {
@@ -95,7 +95,7 @@ const MatchFragger: React.FC = () => {
       exit={{ opacity: 0 }} // Fade out on exit
       transition={{ duration: 2 }}
     >
-      <div className="w-[1920px] h-[1080px]  flex font-bebas-neue font-[500]">
+      <div className="w-[1920px] h-[1080px] flex font-bebas-neue font-[500]">
         <div className="m-[-350px] h-[60px] w-[700px] text-[100px] relative top-[350px] scale-150 left-[1050px] text-white">
           MATCH FRAGGERS
         </div>
@@ -108,7 +108,7 @@ const MatchFragger: React.FC = () => {
               backgroundColor: `${data2[5]?.ColumnB}`,
             }}
           >
-            <div className=" text-[40px] font-[orbitron] font-[800] tracking-wider">
+            <div className="text-[40px] font-[orbitron] font-[800] tracking-wider">
               {data2[2]?.ColumnB} | DAY - {data2[3]?.ColumnB} | MATCH -{" "}
               {data2[4]?.ColumnB}
             </div>
@@ -140,13 +140,15 @@ const MatchFragger: React.FC = () => {
 
                 {/* Team Photo */}
                 <div className="text-white w-[450px] h-[400px] relative right-[50px] top-[10px]">
-                  <img
+                  <Image
                     src={
                       team.player_photo ||
                       "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
                     }
                     alt="photo"
                     className="w-[100%] h-[400px] absolute"
+                    width={450}
+                    height={400}
                   />
                 </div>
 
@@ -171,12 +173,14 @@ const MatchFragger: React.FC = () => {
                     <div> {team.team_name}</div>
                     <div className="bg-black w-[90px] h-[60px] absolute left-[237px] top-[13px] border-solid border-white border-l-[1px] border-t-[1px] border-b-[1px]">
                       <div className="w-[65px] h-[65px] relative left-[10px]">
-                        <img
+                        <Image
                           src={
                             team.team_logo ||
                             "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
                           }
                           alt="logo"
+                          width={65}
+                          height={65}
                           className="bg-cover"
                         />
                       </div>

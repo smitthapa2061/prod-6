@@ -26,7 +26,6 @@ const fadeInAnimation = {
 };
 
 const EventFragger: React.FC = () => {
-  const [data, setData] = useState<PlayerData[]>([]);
   const [top1, setTop1] = useState<PlayerData | null>(null);
   const [primaryColor, setPrimaryColor] = useState<string>("#FF0000");
   const [error, setError] = useState<string | null>(null);
@@ -47,8 +46,6 @@ const EventFragger: React.FC = () => {
           kd: row[5] || "0",
           contribution: row[10] || "0",
         }));
-
-        setData(formattedData);
 
         const url2 = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range2}?key=${apiKey}`;
         const response2 = await axios.get<{ values: string[][] }>(url2);
