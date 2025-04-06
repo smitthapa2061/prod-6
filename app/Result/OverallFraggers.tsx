@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 // Define types for the fragger data and setup data
 interface FraggerData {
@@ -155,7 +156,12 @@ const Fragger: React.FC = () => {
                 }}
               >
                 <div className="w-[100px] h-[100px] mb-[-100px] relative left-[240px]">
-                  <img src={row.team_logo} alt="Team Logo" />
+                  <Image
+                    src={row.team_logo}
+                    alt="Team Logo"
+                    width={120} // specify the width
+                    height={120} // specify the height
+                  />
                 </div>
                 <div className="text-white mb-[-90px] text-[60px] ml-[10px] relative bottom-[10px]">
                   {index + 1}

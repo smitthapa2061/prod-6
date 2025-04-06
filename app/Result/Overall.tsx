@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import axios
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 // Define the types for the fetched data
@@ -24,7 +25,7 @@ interface GoogleSheetsResponse {
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
 const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
 
-const range = "overall1!A2:G25"; // Range you want to fetch (adjust this as needed)
+const range = "overall1!A2:P100"; // Range you want to fetch (adjust this as needed)
 const range2 = "setup!A2:B10"; // Another range for setup data
 
 const Overall: React.FC = () => {
@@ -40,27 +41,28 @@ const Overall: React.FC = () => {
 
         const values = response.data.values || [];
 
+        const seen = new Set<string>();
         const formattedData: RowData[] = values
           .map((row) => ({
-            ColumnA: row[0] || null,
+            ColumnA: row[0] || null, // Team Name
             ColumnB:
               row[1] ||
-              "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png",
-            ColumnC: row[2] ? parseInt(row[2], 10) : 0,
-            ColumnD: row[3] ? parseInt(row[3], 10) : 0,
-            ColumnE: row[4] ? parseInt(row[4], 10) : 0,
-            ColumnF: row[5] ? parseInt(row[5], 10) : 0,
-            ColumnG: row[6] ? parseInt(row[6], 10) : 0,
+              "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png", // Logo
+            ColumnC: row[3] ? parseInt(row[3], 10) : 0, // Kills
+            ColumnD: row[4] ? parseInt(row[4], 10) : 0, // Placement (Position Points)
+            ColumnE: row[9] ? parseInt(row[9], 10) : 0, // WWCD
+            ColumnF: row[2] ? parseInt(row[2], 10) : 0, // Total Score (from column 2)
+            ColumnG: row[10] ? parseInt(row[10], 10) : 0, // Contribution Score
           }))
-          .filter((row) => row.ColumnA);
+          .filter((row) => {
+            if (!row.ColumnA) return false;
+            const normalized = row.ColumnA.trim().toLowerCase();
+            if (seen.has(normalized)) return false;
+            seen.add(normalized);
+            return true;
+          });
 
-        const sortedData = formattedData.sort((a, b) => {
-          const killsDifference = b.ColumnC - a.ColumnC;
-          if (killsDifference !== 0) return killsDifference;
-          return b.ColumnE - a.ColumnE;
-        });
-
-        setData(sortedData);
+        setData(formattedData);
 
         const url2 = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range2}?key=${apiKey}`;
         const response2 = await axios.get<GoogleSheetsResponse>(url2);
@@ -85,16 +87,20 @@ const Overall: React.FC = () => {
 
   // Dynamically divide data into two equal parts
   const sortedData = [...data].sort((a, b) => {
-    const killsDifference = b.ColumnC - a.ColumnC;
-    if (killsDifference !== 0) return killsDifference;
-
-    const wwcdDifference = b.ColumnE - a.ColumnE;
-    if (wwcdDifference !== 0) return wwcdDifference;
-
-    const placementDifference = a.ColumnD - b.ColumnD;
-    if (placementDifference !== 0) return placementDifference;
-
-    return b.ColumnF - a.ColumnF;
+    // Sort by Total Score (ColumnF) in descending order
+    if (b.ColumnF !== a.ColumnF) {
+      return b.ColumnF - a.ColumnF;
+    }
+    // Then by Placement (ColumnD) in ascending order
+    if (a.ColumnD !== b.ColumnD) {
+      return a.ColumnD - b.ColumnD;
+    }
+    // Then by Kills (ColumnC) in descending order
+    if (b.ColumnC !== a.ColumnC) {
+      return b.ColumnC - a.ColumnC;
+    }
+    // Finally, by WWCD (ColumnE) in descending order
+    return b.ColumnE - a.ColumnE;
   });
 
   const half = Math.ceil(sortedData.length / 2);
@@ -204,10 +210,12 @@ const Overall: React.FC = () => {
                     {/* Second Black Box */}
                     <div className="bg-[#000000cf] w-[460px] h-[63px] flex">
                       <div className="w-[62px] h-[62px]">
-                        <img
+                        <Image
                           src={row.ColumnB || ""}
-                          alt="data"
-                          className="w-full h-full"
+                          alt="Team Logo"
+                          width={62}
+                          height={62}
+                          className="w-full h-full object-cover"
                         />
                       </div>
 
@@ -288,10 +296,12 @@ const Overall: React.FC = () => {
                     {/* Second Black Box */}
                     <div className="bg-[#000000cf] w-[460px] h-[63px] flex">
                       <div className="w-[62px] h-[62px]">
-                        <img
+                        <Image
                           src={row.ColumnB || ""}
-                          alt="data"
-                          className="w-full h-full"
+                          alt="Team Logo"
+                          width={62}
+                          height={62}
+                          className="w-full h-full object-cover"
                         />
                       </div>
 
