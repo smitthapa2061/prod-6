@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Dead from "../Stats/assets/deaed_logo.png";
 import { motion } from "framer-motion";
+import Image from "next/image"; // Import Image from next/image
 
 // Define types for match data
 interface Team {
@@ -57,8 +58,8 @@ const LiveStats: React.FC = () => {
           setError(data.error);
         } else {
           const uniqueData = data.match_info
-            .filter((team: any) => !team.player_rank)
-            .reduce((acc: Team[], team: any) => {
+            .filter((team: { player_rank: string }) => !team.player_rank)
+            .reduce((acc: Team[], team: Team) => {
               if (!acc.some((item) => item.team_name === team.team_name)) {
                 acc.push(team);
               }
@@ -81,7 +82,7 @@ const LiveStats: React.FC = () => {
     fetchData();
     const intervalId = setInterval(fetchData, 6000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [sheetApiUrl]); // Added `sheetApiUrl` as a dependency
 
   const validTeams = matchData.filter(
     (team) => typeof team.team_name === "string" && team.team_name.trim() !== ""
@@ -138,12 +139,14 @@ const LiveStats: React.FC = () => {
                   style={{ borderColor: primaryColor }}
                 >
                   <div className="w-[50px] h-[50px] absolute z-10">
-                    <img
+                    <Image
                       src={
                         team.team_logo ||
                         "https://res.cloudinary.com/dqckienxj/image/upload/v1727161652/default_nuloh2.png"
                       }
-                      alt=""
+                      alt="Team Logo"
+                      width={50}
+                      height={50}
                     />
                   </div>
                   <div className="bg-black w-[2px] h-[46px] absolute left-[50px] top-[3px]"></div>
@@ -158,7 +161,12 @@ const LiveStats: React.FC = () => {
                 <div className="absolute left-[240px] flex gap-[3px] mt-[4px]">
                   {team.Alive === 0 ? (
                     <div className="w-[50px] h-[50px] absolute top-[-5px] opacity-[70%]">
-                      <img src={Dead.src as string} alt="" />
+                      <Image
+                        src={Dead.src as string}
+                        alt="Dead Icon"
+                        width={50}
+                        height={50}
+                      />
                     </div>
                   ) : (
                     Array.from({ length: Math.min(team.Alive, 4) }).map(

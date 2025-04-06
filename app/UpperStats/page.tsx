@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image"; // Import the Image component from Next.js
 
 // Define types for the data structures
 interface Team {
@@ -9,14 +10,6 @@ interface Team {
   Alive: number;
   wwcd_chance: number;
   team_kills: number; // Add team_kills to match the data structure
-}
-
-interface SetupData {
-  "PRIMARY COLOR": string;
-}
-
-interface DisplayData {
-  "Upper Stats": string;
 }
 
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
@@ -130,7 +123,7 @@ const UpperStats: React.FC = () => {
       clearInterval(matchDataIntervalId);
       clearInterval(displayDataIntervalId);
     };
-  }, []);
+  }, []); // Empty dependency array to ensure the effect runs only once on mount
 
   if (error) return <p>{error}</p>;
 
@@ -149,12 +142,14 @@ const UpperStats: React.FC = () => {
           >
             {/* Team Logo */}
             <div className="w-[80px] h-[80px]">
-              <img
+              <Image
                 src={
                   team.team_logo ||
                   "https://res.cloudinary.com/dqckienxj/image/upload/v1727161652/default_nuloh2.png"
                 }
                 alt="team logo"
+                width={80}
+                height={80}
                 className="w-full h-full object-cover"
               />
             </div>

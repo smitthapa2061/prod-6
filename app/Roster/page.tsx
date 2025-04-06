@@ -1,8 +1,7 @@
 "use client";
-import React from "react";
-
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image"; // Import Image from next/image
 
 const apiKey = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
 const spreadsheetId = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
@@ -113,7 +112,7 @@ const MatchData: React.FC = () => {
             .map((row, index) => (
               <motion.div
                 key={`${currentDataIndex}-${index}`} // Add currentDataIndex to key to re-trigger animation
-                className="w-[570px] h-[500px]  mt-[280px] justify-center flex"
+                className="w-[570px] h-[500px] mt-[280px] justify-center flex"
                 initial={{ opacity: 0, y: 550 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -124,12 +123,14 @@ const MatchData: React.FC = () => {
               >
                 <div className="">
                   <div className="w-[350px] h-[350px] bg-[#000000bb]">
-                    <img
+                    <Image
                       src={
                         row[1] ||
                         "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
                       }
-                      alt=""
+                      alt="Team Logo"
+                      width={350}
+                      height={350}
                       className="w-[100%] h-[100%]"
                     />
                     <div className="text-black bg-white text-[50px] font-bebas-neue w-[350px] h-[60px] absolute flex justify-center">

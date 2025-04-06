@@ -1,5 +1,5 @@
-("");
 import React from "react";
+import Image from "next/image"; // Import Image from next/image
 
 // Define types for fetched data
 interface SlotData {
@@ -74,13 +74,15 @@ const SlotListData = async () => {
               className="flex flex-col gap-3 p-0 border rounded-lg bg-white w-[230px] h-[170px] mt-[70px] relative top-[-15px] left-[34px]"
             >
               <div className="bg-[#ffffff] w-[230px] h-[400px] border rounded-lg flex justify-center relative top-[2px]">
-                <img
+                <Image
                   src={
                     row.ColumnC ||
                     "https://res.cloudinary.com/dqckienxj/image/upload/v1727161652/default_nuloh2.png"
                   }
-                  alt=""
-                  className="w-[170px] h-[160px] relative top-[-10px]"
+                  alt="Slot Image"
+                  width={170}
+                  height={160}
+                  className="relative top-[-10px]"
                 />
               </div>
               <div
