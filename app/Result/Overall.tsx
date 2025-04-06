@@ -33,42 +33,37 @@ const Overall: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Function to fetch data from Google Sheets API using Axios
     const fetchData = async () => {
       try {
-        // Fetch main data from Google Sheets
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-        const response = await axios.get<GoogleSheetsResponse>(url); // Explicitly type the response
+        const response = await axios.get<GoogleSheetsResponse>(url);
 
         const values = response.data.values || [];
 
-        // Format the fetched data
         const formattedData: RowData[] = values
           .map((row) => ({
-            ColumnA: row[0] || null, // Team Name
+            ColumnA: row[0] || null,
             ColumnB:
               row[1] ||
-              "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png", // Logo URL
-            ColumnC: row[2] ? parseInt(row[2], 10) : 0, // Kills
-            ColumnD: row[3] ? parseInt(row[3], 10) : 0, // Placement
-            ColumnE: row[4] ? parseInt(row[4], 10) : 0, // WWCD
-            ColumnF: row[5] ? parseInt(row[5], 10) : 0, // Total Score
-            ColumnG: row[6] ? parseInt(row[6], 10) : 0, // Sorting Score
+              "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png",
+            ColumnC: row[2] ? parseInt(row[2], 10) : 0,
+            ColumnD: row[3] ? parseInt(row[3], 10) : 0,
+            ColumnE: row[4] ? parseInt(row[4], 10) : 0,
+            ColumnF: row[5] ? parseInt(row[5], 10) : 0,
+            ColumnG: row[6] ? parseInt(row[6], 10) : 0,
           }))
-          .filter((row) => row.ColumnA); // Remove empty rows
+          .filter((row) => row.ColumnA);
 
-        // Sort data by kills (ColumnC) and WWCD (ColumnE) for tie-breaking
         const sortedData = formattedData.sort((a, b) => {
           const killsDifference = b.ColumnC - a.ColumnC;
           if (killsDifference !== 0) return killsDifference;
           return b.ColumnE - a.ColumnE;
         });
 
-        setData(sortedData); // ✅ Now we set sorted data correctly
+        setData(sortedData);
 
-        // Fetch additional setup data
         const url2 = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range2}?key=${apiKey}`;
-        const response2 = await axios.get<GoogleSheetsResponse>(url2); // Explicitly type the response
+        const response2 = await axios.get<GoogleSheetsResponse>(url2);
         const values2 = response2.data.values || [];
 
         const formattedData2: SetupDataRow[] = values2.map((row) => ({
@@ -76,12 +71,16 @@ const Overall: React.FC = () => {
         }));
 
         setData2(formattedData2);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message); // Now we safely access 'message'
+        } else {
+          setError("An unknown error occurred");
+        }
       }
     };
 
-    fetchData(); // Call fetchData when the component mounts
+    fetchData();
   }, []);
 
   // Dynamically divide data into two equal parts

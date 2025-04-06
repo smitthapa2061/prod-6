@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import Image from "next/image"; // Import Image for optimization
 
 // Types
 interface MatchPlayerData {
@@ -81,7 +82,7 @@ const Mvp: React.FC = () => {
         setError("Error fetching setup data.");
         setLoading(false);
       });
-  }, []);
+  }, [setupURL]); // Added setupURL to the dependency array
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -121,23 +122,29 @@ const Mvp: React.FC = () => {
                   transition={{ duration: 1, ease: "easeOut" }}
                 >
                   <div className="absolute top-[134px] scale-110 left-[90px]">
-                    <img
+                    <Image
                       src={
                         topPlayer?.player_photo ||
                         "https://res.cloudinary.com/dqckienxj/image/upload/v1737809848/Layer_6_cnd9gl_ugaxek.png"
                       }
-                      alt=""
+                      alt="Player"
+                      width={800}
+                      height={500}
+                      priority
                     />
                   </div>
                 </motion.div>
                 <div className="text-white font-teko font-[300]">
                   <div className="bg-[#ebebeb] w-[200px] h-[200px] relative left-[1000px] top-[450px]">
-                    <img
+                    <Image
                       src={
                         topPlayer?.team_logo ||
                         "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
                       }
-                      alt=""
+                      alt="Team Logo"
+                      width={200}
+                      height={200}
+                      priority
                     />
                   </div>
 
