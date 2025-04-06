@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import Image from "next/image"; // Import Next.js Image component
+import Image from "next/image"; // Import Image from next/image
 
-// Define types for the data structure
+// Define types for the fetched data
 interface TeamData {
   teamTag: string;
   teamLogo: string;
@@ -14,6 +14,7 @@ interface TeamData {
 
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
 const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
+
 const range = "overall1!A2:G25"; // Range for overall data
 const range2 = "setup!A2:B10"; // Range for setup data (primary color)
 
@@ -22,10 +23,10 @@ const fadeInAnimation = {
   visible: { opacity: 1 },
 };
 
-const Champions: React.FC = () => {
-  const [top1, setTop1] = useState<TeamData | null>(null); // Top team data (null initially)
+const SecondRunner: React.FC = () => {
+  const [top1, setTop1] = useState<TeamData | null>(null);
   const [primaryColor, setPrimaryColor] = useState<string>("#FF0000"); // Default red color
-  const [error, setError] = useState<string | null>(null); // Error message state
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Fetch data from Google Sheets API
@@ -37,25 +38,19 @@ const Champions: React.FC = () => {
         const values = response.data.values || [];
 
         // Process data
-        const formattedData: TeamData[] = values.map((row) => ({
+        const formattedData: TeamData[] = values.map((row: string[]) => ({
           teamTag: row[0] || "",
           teamLogo: row[1] || "https://default-image-url.com", // Fallback logo
-          totalkills: row[3] ? Number(row[3]) : 0,
-          rankpoint: row[4] ? Number(row[4]) : 0,
-          totalpoints: row[2] ? Number(row[2]) : 0,
+          totalkills: row[3] ? parseInt(row[3], 10) : 0,
+          rankpoint: row[4] ? parseInt(row[4], 10) : 0,
+          totalpoints: row[2] ? parseInt(row[2], 10) : 0,
         }));
 
-        // Remove duplicates based on teamTag, keeping the first occurrence of each team
+        // Remove duplicates based on teamTag while keeping player data intact
         const uniqueTeams = formattedData.filter(
           (value, index, self) =>
             index === self.findIndex((t) => t.teamTag === value.teamTag)
         );
-
-        // Set top 1 data
-        const sortedData = uniqueTeams.sort(
-          (a, b) => b.totalpoints - a.totalpoints
-        );
-        setTop1(sortedData[0]); // Assuming the top team is the one with the highest total points
 
         // Fetch primary color data
         const url2 = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range2}?key=${apiKey}`;
@@ -69,8 +64,16 @@ const Champions: React.FC = () => {
         if (primaryColorValue) {
           setPrimaryColor(primaryColorValue[1] || "#FF0000"); // Fallback to red if no color found
         }
+
+        // Set top 1 data
+        const sortedData = uniqueTeams.sort(
+          (a, b) => b.totalpoints - a.totalpoints
+        );
+        setTop1(sortedData[0]); // Assuming the top team is the one with the third highest total points
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Unknown error");
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
       }
     };
 
@@ -96,58 +99,38 @@ const Champions: React.FC = () => {
           style={{ position: "relative" }}
         >
           <div className="h-[1080px] flex w-[1920px] items-start top-[120px] relative ">
-            <motion.div
+            <motion.img
               initial={{ x: -800 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.5 }}
               className="w-[800px] relative right-[116px] "
-            >
-              <Image
-                src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-                alt="Team Image"
-                width={800}
-                height={800}
-              />
-            </motion.div>
-            <motion.div
+              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+              alt="Team Image"
+            />
+            <motion.img
               initial={{ x: -800 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.5 }}
               className="w-[800px] relative right-[424px]"
-            >
-              <Image
-                src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-                alt="Team Image"
-                width={800}
-                height={800}
-              />
-            </motion.div>
-            <motion.div
+              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+              alt="Team Image"
+            />
+            <motion.img
               initial={{ x: -800 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.5 }}
               className="w-[800px] relative right-[800px]"
-            >
-              <Image
-                src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-                alt="Player Image"
-                width={800}
-                height={800}
-              />
-            </motion.div>
-            <motion.div
+              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+              alt="Player Image"
+            />
+            <motion.img
               initial={{ x: -800 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.5 }}
               className="w-[800px] relative right-[1108px]"
-            >
-              <Image
-                src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-                alt="Player Image"
-                width={800}
-                height={800}
-              />
-            </motion.div>
+              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+              alt="Player Image"
+            />
           </div>
           <div className="relative bottom-[300px]">
             <div>
@@ -155,7 +138,7 @@ const Champions: React.FC = () => {
                 style={{ backgroundColor: primaryColor }}
                 className="Rectangle8 w-[1920px] h-0.5"
               ></div>
-              <div className="Rectangle8 relative -top-0.5 w-[300px] h-0.5  bg-[#1c1c1c]"></div>
+              <div className="Rectangle8 relative -top-0.5 w-[300px] h-0.5 bg-[#1c1c1c]"></div>
             </div>
 
             <div className="flex relative bottom-0.5">
@@ -198,7 +181,7 @@ const Champions: React.FC = () => {
                       transition={{ duration: 0.5, delay: 0.4 }}
                       className="flex font-[300] items-start text-6xl text-white font-teko"
                     >
-                      RANK-1
+                      RANK-3
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, x: -40 }}
@@ -235,4 +218,4 @@ const Champions: React.FC = () => {
   );
 };
 
-export default Champions;
+export default SecondRunner;

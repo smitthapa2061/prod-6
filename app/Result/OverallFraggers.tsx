@@ -166,11 +166,16 @@ const Fragger: React.FC = () => {
                 <div className="text-white mb-[-90px] text-[60px] ml-[10px] relative bottom-[10px]">
                   {index + 1}
                 </div>
-                <div className="text-white w-[450px] relative right-[50px] top-[10px] mb-[400px]">
-                  <img
-                    src={row.player_photo}
+                <div className="text-white w-[490px] relative right-[80px] top-[10px] mb-[400px]">
+                  <Image
+                    src={
+                      row.player_photo ||
+                      "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+                    }
                     alt="Player"
-                    className="w-[100%] h-[400px] absolute"
+                    width={800}
+                    height={800}
+                    className="object-cover absolute"
                   />
                 </div>
                 <div className="w-[100%] bg-white h-[80px] relative top-[10px]">

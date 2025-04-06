@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import Image from "next/image"; // Import Image from next/image
 
 // Define types for the fetched data
 interface TeamData {
@@ -9,10 +10,6 @@ interface TeamData {
   totalkills: number;
   rankpoint: number;
   totalpoints: number;
-}
-
-interface SetupData {
-  primaryColor: string;
 }
 
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
@@ -27,7 +24,6 @@ const fadeInAnimation = {
 };
 
 const SecondRunner: React.FC = () => {
-  const [data, setData] = useState<TeamData[]>([]);
   const [top1, setTop1] = useState<TeamData | null>(null);
   const [primaryColor, setPrimaryColor] = useState<string>("#FF0000"); // Default red color
   const [error, setError] = useState<string | null>(null);
@@ -56,8 +52,6 @@ const SecondRunner: React.FC = () => {
             index === self.findIndex((t) => t.teamTag === value.teamTag)
         );
 
-        setData(uniqueTeams);
-
         // Fetch primary color data
         const url2 = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range2}?key=${apiKey}`;
         const response2 = await axios.get<{ values: string[][] }>(url2);
@@ -76,8 +70,10 @@ const SecondRunner: React.FC = () => {
           (a, b) => b.totalpoints - a.totalpoints
         );
         setTop1(sortedData[2]); // Assuming the top team is the one with the third highest total points
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
       }
     };
 
@@ -154,10 +150,12 @@ const SecondRunner: React.FC = () => {
                   <div className="flex justify-center font-[300] items-start text-6xl text-white font-teko">
                     {top1.teamTag}
                   </div>
-                  <img
+                  <Image
                     className="relative left-3 h-[230px]"
                     src={top1.teamLogo}
                     alt="Team Logo"
+                    width={230}
+                    height={230}
                   />
                 </div>
               </div>

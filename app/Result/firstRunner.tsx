@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import Image from "next/image"; // Import Image from next/image
 
 // Define types for the fetched data
 interface TeamData {
@@ -9,10 +10,6 @@ interface TeamData {
   totalkills: number;
   rankpoint: number;
   totalpoints: number;
-}
-
-interface GoogleSheetResponse {
-  values: string[][];
 }
 
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
@@ -26,8 +23,7 @@ const fadeInAnimation = {
   visible: { opacity: 1 },
 };
 
-const FirstRunnerUp: React.FC = () => {
-  const [data, setData] = useState<TeamData[]>([]);
+const SecondRunner: React.FC = () => {
   const [top1, setTop1] = useState<TeamData | null>(null);
   const [primaryColor, setPrimaryColor] = useState<string>("#FF0000"); // Default red color
   const [error, setError] = useState<string | null>(null);
@@ -38,28 +34,27 @@ const FirstRunnerUp: React.FC = () => {
       try {
         // Fetch main team data
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-        const response = await axios.get<GoogleSheetResponse>(url);
+        const response = await axios.get<{ values: string[][] }>(url);
         const values = response.data.values || [];
 
         // Process data
-        const formattedData: TeamData[] = values.map((row) => ({
+        const formattedData: TeamData[] = values.map((row: string[]) => ({
           teamTag: row[0] || "",
           teamLogo: row[1] || "https://default-image-url.com", // Fallback logo
           totalkills: row[3] ? parseInt(row[3], 10) : 0,
           rankpoint: row[4] ? parseInt(row[4], 10) : 0,
-          totalpoints: row[3] ? parseInt(row[2], 10) : 0,
+          totalpoints: row[2] ? parseInt(row[2], 10) : 0,
         }));
 
-        // Filter out duplicate teams based on teamTag, keeping player names and photos intact
-        const uniqueTeams = Array.from(
-          new Map(formattedData.map((item) => [item.teamTag, item])).values()
+        // Remove duplicates based on teamTag while keeping player data intact
+        const uniqueTeams = formattedData.filter(
+          (value, index, self) =>
+            index === self.findIndex((t) => t.teamTag === value.teamTag)
         );
-
-        setData(uniqueTeams);
 
         // Fetch primary color data
         const url2 = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range2}?key=${apiKey}`;
-        const response2 = await axios.get<GoogleSheetResponse>(url2);
+        const response2 = await axios.get<{ values: string[][] }>(url2);
         const values2 = response2.data.values || [];
 
         // Extract primary color
@@ -74,9 +69,11 @@ const FirstRunnerUp: React.FC = () => {
         const sortedData = uniqueTeams.sort(
           (a, b) => b.totalpoints - a.totalpoints
         );
-        setTop1(sortedData[1]); // Now, setting the second team with the highest total points
-      } catch (err: any) {
-        setError(err.message);
+        setTop1(sortedData[1]); // Assuming the top team is the one with the third highest total points
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
       }
     };
 
@@ -141,11 +138,11 @@ const FirstRunnerUp: React.FC = () => {
                 style={{ backgroundColor: primaryColor }}
                 className="Rectangle8 w-[1920px] h-0.5"
               ></div>
-              <div className="Rectangle8 relative -top-0.5 w-[300px] h-0.5 bg-white"></div>
+              <div className="Rectangle8 relative -top-0.5 w-[300px] h-0.5 bg-[#1c1c1c]"></div>
             </div>
 
             <div className="flex relative bottom-0.5">
-              <div className="w-[300px] h-[300px] bg-white">
+              <div className="w-[300px] h-[300px] bg-[#1c1c1c]">
                 <div
                   style={{ backgroundColor: primaryColor }}
                   className="h-14 font-tungsten text-white bg-red-500"
@@ -153,10 +150,12 @@ const FirstRunnerUp: React.FC = () => {
                   <div className="flex justify-center font-[300] items-start text-6xl text-white font-teko">
                     {top1.teamTag}
                   </div>
-                  <img
+                  <Image
                     className="relative left-3 h-[230px]"
                     src={top1.teamLogo}
                     alt="Team Logo"
+                    width={230}
+                    height={230}
                   />
                 </div>
               </div>
@@ -172,7 +171,7 @@ const FirstRunnerUp: React.FC = () => {
                       transition={{ duration: 0.5, delay: 0.3 }}
                       className="flex justify-center font-bebas-neue  items-start relative bottom-[55px] text-[256px] text-white"
                     >
-                      1ST RUNNER UP
+                      FIRST RUNNER UP
                     </motion.div>
                   </div>
                   <div className="flex w-[1620px] justify-evenly items-center">
@@ -182,7 +181,7 @@ const FirstRunnerUp: React.FC = () => {
                       transition={{ duration: 0.5, delay: 0.4 }}
                       className="flex font-[300] items-start text-6xl text-white font-teko"
                     >
-                      RANK-2
+                      RANK-3
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, x: -40 }}
@@ -219,4 +218,4 @@ const FirstRunnerUp: React.FC = () => {
   );
 };
 
-export default FirstRunnerUp;
+export default SecondRunner;

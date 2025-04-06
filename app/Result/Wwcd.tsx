@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-
 import { motion } from "framer-motion";
 import axios from "axios";
+import Image from "next/image";
 
 // Types 💫
 interface Player {
@@ -24,20 +24,18 @@ interface MatchResponse {
   error?: string;
 }
 
+const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws"; // Your Google Sheets API key
+const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo"; // Your Google Sheets ID
+const urlMatchData =
+  "https://script.google.com/macros/s/AKfycbwYvL5mfJg-XCSAptLqPZF805aOKjf5U2vRihZIpFLsT3WmZq6onYIhD4rToftUX68xyw/exec";
+const urlSetupData = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/setup!A2:B10?key=${apiKey}`;
+
 const WwcdTeamStats: React.FC = () => {
   const [matchData, setMatchData] = useState<Player[]>([]);
   const [setupData, setSetupData] = useState<SetupRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [primaryColor, setPrimaryColor] = useState<string | undefined>(); // Optional
-
-  const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws"; // Your Google Sheets API key
-  const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo"; // Your Google Sheets ID
-
-  const urlMatchData =
-    "https://script.google.com/macros/s/AKfycbwYvL5mfJg-XCSAptLqPZF805aOKjf5U2vRihZIpFLsT3WmZq6onYIhD4rToftUX68xyw/exec";
-
-  const urlSetupData = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/setup!A2:B10?key=${apiKey}`;
 
   useEffect(() => {
     // Fetch match data
@@ -74,7 +72,7 @@ const WwcdTeamStats: React.FC = () => {
         setError("Error fetching setup data.");
         setLoading(false);
       });
-  }, []);
+  }, []); // Empty dependency array ensures this only runs once
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -115,10 +113,12 @@ const WwcdTeamStats: React.FC = () => {
             </div>
           </div>
           <div className="w-[250px] h-[250px] ml-[20px] absolute top-[700px]">
-            <img
-              src={winningTeam.team_logo}
+            <Image
+              src={winningTeam.team_logo || "/default-team-logo.png"}
               alt={winningTeam.team_name}
-              className="w-full h-full"
+              width={250}
+              height={250}
+              className="w-full h-full object-contain"
             />
           </div>
           <div className="ml-[270px] absolute top-[690px] text-[200px]">
@@ -139,13 +139,15 @@ const WwcdTeamStats: React.FC = () => {
                   className="w-[323px] h-[700px] text-white text-[30px] font-bold shadow-lg"
                 >
                   <div className="w-[500px] h-[500px] relative top-[200px] left-[-50px]">
-                    <img
+                    <Image
                       src={
                         player.player_photo ||
                         "https://res.cloudinary.com/dqckienxj/image/upload/v1737809848/Layer_6_cnd9gl_ugaxek.png"
                       }
                       alt={player.player_name}
-                      className="w-[100%] h-[100%]"
+                      width={500}
+                      height={500}
+                      className="w-full h-full object-cover"
                       style={{
                         clipPath:
                           "polygon(10% 10%, 64% 0, 100% 100%,80% -15%,74% 100%, 10% 100%)",
