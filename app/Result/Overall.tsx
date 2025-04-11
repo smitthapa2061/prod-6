@@ -87,19 +87,16 @@ const Overall: React.FC = () => {
 
   // Dynamically divide data into two equal parts
   const sortedData = [...data].sort((a, b) => {
-    // Sort by Total Score (ColumnF) in descending order
-    if (b.ColumnF !== a.ColumnF) {
-      return b.ColumnF - a.ColumnF;
-    }
-    // Then by Placement (ColumnD) in ascending order
-    if (a.ColumnD !== b.ColumnD) {
-      return a.ColumnD - b.ColumnD;
-    }
-    // Then by Kills (ColumnC) in descending order
-    if (b.ColumnC !== a.ColumnC) {
-      return b.ColumnC - a.ColumnC;
-    }
-    // Finally, by WWCD (ColumnE) in descending order
+    // Total Score (highest first)
+    if (b.ColumnF !== a.ColumnF) return b.ColumnF - a.ColumnF;
+
+    // Placement Points (lower is better)
+    if (a.ColumnD !== b.ColumnD) return b.ColumnD - a.ColumnD;
+
+    // Kills (more is better)
+    if (b.ColumnC !== a.ColumnC) return b.ColumnC - a.ColumnC;
+
+    // WWCD (more is better)
     return b.ColumnE - a.ColumnE;
   });
 
