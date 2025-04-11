@@ -21,7 +21,7 @@ interface SetupData {
 
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
 const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
-const range = "overall1!A2:P25"; // Range you want to fetch (adjust this as needed)
+const range = "overall1!A2:O200"; // Range you want to fetch (adjust this as needed)
 const range2 = "setup!A2:B10"; // Another range for setup data
 
 const Fragger: React.FC = () => {
