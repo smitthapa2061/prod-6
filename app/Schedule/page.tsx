@@ -1,5 +1,7 @@
 // app/schedule/page.tsx
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 
 type MatchData = {
   MATCH_NAME: string;
@@ -21,52 +23,59 @@ const spreadsheetId = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
 const matchScheduleRange = "matchSchedule!A2:H6";
 const setupRange = "setup!A2:B10";
 
-const fetchMatchScheduleData = async (): Promise<MatchData[]> => {
-  try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${matchScheduleRange}?key=${apiKey}`;
-    const response = await fetch(url);
-    if (!response.ok)
-      throw new Error("Failed to fetch data from Google Sheets API");
-    const result = await response.json();
-    return result.values
-      .filter((row: string[]) => row[3]?.toLowerCase() === "true") // Filter by status "true"
-      .map((row: string[]) => ({
-        MATCH_NAME: row[0] || "",
-        MAP_NAME: row[1] || "",
-        IMAGE_LINK: row[2] || "",
-        CHECK_BOX: row[3] || "",
-        MATCH_NUMBER: row[4] || "",
-        MATCH_TIME: row[5] || "",
-        WWCD_TEAM: row[6] || "",
-        WWCD_TEAM_LOGO: row[7] || "",
-      }));
-  } catch (err) {
-    console.error("Error fetching MatchSchedule data:", err);
-    return [];
-  }
-};
+const Schedule = () => {
+  const [matchScheduleData, setMatchScheduleData] = useState<MatchData[]>([]);
+  const [setupData, setSetupData] = useState<SetupData[]>([]);
+  const [primaryColor, setPrimaryColor] = useState("#cb201e");
 
-const fetchSetupData = async (): Promise<SetupData[]> => {
-  try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${setupRange}?key=${apiKey}`;
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Failed to fetch Setup data");
-    const result = await response.json();
-    return result.values.map((row: string[]) => ({ ColumnB: row[1] || "" }));
-  } catch (err) {
-    console.error("Error fetching Setup data:", err);
-    return [];
-  }
-};
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const matchRes = await fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${matchScheduleRange}?key=${apiKey}`
+        );
+        const matchJson = await matchRes.json();
 
-const Schedule = async () => {
-  const matchScheduleData = await fetchMatchScheduleData();
-  const setupData = await fetchSetupData();
+        const filteredMatches = matchJson.values
+          .filter((row: string[]) => row[3]?.toLowerCase() === "true")
+          .map((row: string[]) => ({
+            MATCH_NAME: row[0] || "",
+            MAP_NAME: row[1] || "",
+            IMAGE_LINK: row[2] || "",
+            CHECK_BOX: row[3] || "",
+            MATCH_NUMBER: row[4] || "",
+            MATCH_TIME: row[5] || "",
+            WWCD_TEAM: row[6] || "",
+            WWCD_TEAM_LOGO: row[7] || "",
+          }));
 
-  const primaryColor: string = setupData[5]?.ColumnB || "#cb201e";
+        setMatchScheduleData(filteredMatches);
+      } catch (err) {
+        console.error("Error fetching match schedule:", err);
+      }
+
+      try {
+        const setupRes = await fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${setupRange}?key=${apiKey}`
+        );
+        const setupJson = await setupRes.json();
+
+        const mappedSetup = setupJson.values.map((row: string[]) => ({
+          ColumnB: row[1] || "",
+        }));
+
+        setSetupData(mappedSetup);
+        setPrimaryColor(mappedSetup[5]?.ColumnB || "#cb201e");
+      } catch (err) {
+        console.error("Error fetching setup data:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <div className="w-[1920px] h-[1080px] ">
+    <div className="w-[1920px] h-[1080px]">
       <div className="text-white text-[160px] font-bebas-neue w-[900px] h-[200px] border-[1px] border-transparent rounded-[10px] flex justify-center relative top-[30px] mx-auto">
         <div className="absolute top-[-10px] w-[900px] left-[83px]">
           MATCH SCHEDULE
@@ -97,7 +106,7 @@ const Schedule = async () => {
                 </div>
               </div>
               <div
-                className="bg-red-600 w-[90px] h-[140px] top-[-85px] relative z-10 flex justify-center"
+                className="w-[90px] h-[140px] top-[-85px] relative z-10 flex justify-center"
                 style={{
                   backgroundColor: primaryColor,
                 }}
@@ -109,7 +118,7 @@ const Schedule = async () => {
 
               {match.WWCD_TEAM ? (
                 <div
-                  className="bg-violet-800 w-[full] h-[850px] relative top-[-87px] z-0"
+                  className="w-[full] h-[850px] relative top-[-87px] z-0"
                   style={{
                     background: `url(${match.IMAGE_LINK}) no-repeat center center`,
                     backgroundSize: "cover",
@@ -120,12 +129,12 @@ const Schedule = async () => {
                       match.WWCD_TEAM_LOGO ||
                       "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
                     }
-                    alt=""
+                    alt="logo"
                     className="mb-[-315px]"
                   />
                   <div className="bg-gradient-to-b from-transparent to-black h-[360px] relative top-[200px]"></div>
                   <div
-                    className="bg-red-800 h-[96px] w-[340px] absolute top-[496px]"
+                    className="h-[96px] w-[340px] absolute top-[496px]"
                     style={{
                       backgroundColor: primaryColor,
                     }}
@@ -137,14 +146,14 @@ const Schedule = async () => {
                 </div>
               ) : (
                 <div
-                  className="bg-violet-800 w-[full] h-[850px] relative top-[-87px] z-0"
+                  className="w-[full] h-[850px] relative top-[-87px] z-0"
                   style={{
                     background: `url(${match.IMAGE_LINK}) no-repeat center center`,
                     backgroundSize: "cover",
                   }}
                 >
                   <div
-                    className="bg-red-800 h-[96px] w-[full] relative top-[496px]"
+                    className="h-[96px] w-[full] relative top-[496px]"
                     style={{
                       backgroundColor: primaryColor,
                     }}
