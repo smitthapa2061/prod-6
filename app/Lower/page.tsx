@@ -1,6 +1,7 @@
 // This is a full server component
 import React from "react";
 import Image from "next/image"; // Make sure you import Image from Next.js
+import { Result } from "postcss";
 // Define types for the data structure
 interface LowerData {
   TOR_NAME: string;
@@ -14,9 +15,9 @@ interface LowerData {
   TEXT_COLOR_2: string;
 }
 
-const apiKey = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
-const spreadsheetId = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
-const range = "setup!A2:B10"; // Range you want to fetch (adjust this as needed)
+const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
+const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
+const range = "setup!A2:B16"; // Range you want to fetch (adjust this as needed)
 
 // Function to fetch data from Google Sheets
 const fetchLowerData = async (): Promise<LowerData | null> => {
@@ -56,49 +57,54 @@ const Lower = async () => {
   }
 
   return (
-    <div className="flex items-end">
-      <div className="flex items-center gap-2 w-[1920px] h-[1080px] absolute left-[3%] top-[390px]">
+    <div className=" flex items-end  w-[1920px] h-[1080px]">
+      <div className="mb-[100px] ">
+        {/* Logo Left, Clipped Info Right */}
         <div
-          className="bg-[#cb201e] mt-4 w-[10rem] h-[10rem] rotate-45 flex justify-center items-center shadow-xl"
-          style={{ backgroundColor: `${data.PRIMARY_COLOR}` }}
+          className="top-[100px] w-[560px] h-[180px] flex shadow-xl  justify-between relative bg-gradient-to-r from-[#d3d3d3] to-white"
+          style={{ backgroundColor: data.PRIMARY_COLOR }}
         >
           <div
-            className="bg-[#8a110f] border-4 border-black w-[8rem] h-[8rem] flex items-center justify-center"
-            style={{ backgroundColor: `${data.PRIMARY_COLOR}` }}
+            className="bg-black text-[2rem] font-bold px-2 py-1 rounded uppercase w-fit  tracking-wider absolute top-[-23px] z-[999] right-6 text-white shadow-xl  font-[orbitron] skew-x-12"
+            style={{
+              backgroundColor: data.SECONDARY_COLOR,
+              color: data.TEXT_COLOR_1,
+            }}
           >
-            <Image
+            {data.TOR_NAME}
+          </div>
+          {/* Left Box - Logo (Rectangle) */}
+          <div className="w-max h-full flex items-center justify-center">
+            <img
               src={data.TOR_LOGO}
-              alt="Tournament Logo"
-              className="transform rotate-[-45deg] w-full h-full p-2"
+              alt="Logo"
+              className="h-full aspect-square object-contain"
             />
           </div>
-        </div>
-        <div className="flex flex-col">
-          <div className="w-[14rem] h-[1rem] transform skew-x-[45deg] bg-white flex items-center">
-            <span className="transform -skew-x-[45deg] text-black font-bebas-neue mx-2">
-              <p className="font-[900] font-[orbitron] tracking-widest relative left-[8px]">
-                {data.TOR_NAME}
-              </p>
-            </span>
-          </div>
 
+          {/* Right Box - Clipped Left Edge Info */}
           <div
-            className="w-[20rem] h-[4rem] transform skew-x-[45deg] bg-[#cb201e] flex justify-center items-center"
-            style={{ backgroundColor: `${data.PRIMARY_COLOR}` }}
+            className="w-4/6 h-full flex flex-col justify-center items-end px-4 text-white skew-x-12"
+            style={{
+              clipPath:
+                "polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%, 20% 30%, 0% 60%)",
+              backgroundColor: data.PRIMARY_COLOR,
+            }}
           >
-            <span className="block transform -skew-x-[45deg] text-white font-[200] text-[3.1rem] font-bebas-neue mx-2 relative top-[2px]">
-              DAY {data.DAY} - MATCH {data.MATCHES}
-            </span>
-          </div>
-          <div className="flex items-center justify-start mt-2">
-            <div className="bg-white w-[17rem] h-[4rem] transform skew-x-[135deg] shadow-lg flex items-center justify-center">
-              <div className="block transform -skew-x-[135deg] text-black font-[500] text-5xl font-bebas-neue mx-2">
-                {data.ROUND}
+            <div className="flex flex-col ">
+              <div className="text-[6.2rem] font-bebas-neue relative top-[20px] ">
+                Match {data.MATCHES}
+              </div>
+              <div
+                className="bg-black text-[1rem] font-bold px-2 py-1 rounded uppercase w-[180px] h-[35px] tracking-widest font-[orbitron] text-center top-[-10px] left-[20px] relative"
+                style={{
+                  backgroundColor: data.SECONDARY_COLOR,
+                  color: data.TEXT_COLOR_1,
+                }}
+              >
+                DAY {data.DAY}
               </div>
             </div>
-            <div className="w-[5rem] h-[0.4rem] bg-white transform rotate-[135deg] -ml-6 shadow-lg"></div>
-            <div className="w-[5rem] h-[0.4rem] bg-white transform rotate-[135deg] -ml-16 shadow-lg"></div>
-            <div className="w-[5rem] h-[0.4rem] bg-white transform rotate-[135deg] -ml-16 shadow-lg"></div>
           </div>
         </div>
       </div>

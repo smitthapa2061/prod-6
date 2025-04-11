@@ -11,6 +11,7 @@ export default {
       fontFamily: {
         "bebas-neue": ["Bebas Neue", "sans-serif"],
         "gemunu-libre": ["Gemunu Libre", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"],
         teko: ["Teko", "sans-serif"],
       },
       colors: {

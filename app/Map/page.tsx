@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image"; // Make sure you import Image from Next.js
+import { div } from "framer-motion/client";
 // Google Sheets API details
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
 const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
@@ -60,80 +61,181 @@ const Map = async () => {
   const setupData = await fetchSetupData();
 
   // Colors from setup sheet
+  const round = setupData["TOR NAME"] || "#cb201e";
   const primaryColor = setupData["PRIMARY COLOR"] || "#cb201e";
   const textColor = setupData["TEXT COLOR 1"] || "black";
 
   // Split data into two halves for left & right containers
-  const firstHalf = slotData.slice(0, 7);
-  const secondHalf = slotData.slice(7, 14);
+  const firstHalf = slotData.slice(0, 5);
+  const secondHalf = slotData.slice(5, 10);
+  const thirdHalf = slotData.slice(10, 15);
+  const fourthHalf = slotData.slice(15, 20);
 
   return (
-    <div className="w-[1920px] h-[1080px] flex justify-center items-center">
-      {/* Left side container */}
-      <div className="flex flex-col gap-3 items-center relative left-[-520px]">
-        {firstHalf.map((row: SlotRow, index: number) =>
-          row.ColumnB ? (
-            <div
-              key={index}
-              className="flex flex-col gap-3 p-0 w-[480px] h-[140px] relative"
-              style={{ backgroundColor: primaryColor }}
-            >
-              <div className="w-[230px] h-[120px] flex justify-center absolute top-[2px] left-[0px]">
-                <Image
-                  src={
-                    row.ColumnC ||
-                    "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
-                  }
-                  alt=""
-                  className="w-[170px] h-[160px]"
-                />
-              </div>
-              <div
-                className="w-[250px] h-[90px] bg-white flex justify-center items-center font-[300] text-[80px] font-bebas-neue relative top-[20px] left-[230px]"
-                style={{ color: textColor }}
-              >
-                {row.ColumnB}
-              </div>
-            </div>
-          ) : null
-        )}
+    <div>
+      <div className="w-[1920px] h-[1080px] flex justify-center items-center ">
+        <div className="flex  left-[540px] absolute ">
+          {/* Left side container */}
+          <div className="flex flex-col gap-3 items-center relative right-[500px] top-[60px] ">
+            {firstHalf.map((row: SlotRow, index: number) =>
+              row.ColumnB ? (
+                <div
+                  key={index}
+                  className="flex flex-col gap-3 p-0 w-[150px] h-[120px] relative mb-[60px] bg-[#00000096]"
+                >
+                  <div className="w-[150px] h-[20px] flex justify-center absolute top-[2px] left-[0px]">
+                    <Image
+                      src={
+                        row.ColumnC ||
+                        "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
+                      }
+                      alt=""
+                      className="w-[170px] h-[120px] p-2"
+                      width={100}
+                      height={50}
+                    />
+                  </div>
+                  <div
+                    style={{ backgroundColor: primaryColor }}
+                    className="bg-black w-[100%] h-[40px] absolute top-[120px] text-white font-bebas-neue text-[25px] flex items-center justify-center"
+                  >
+                    <div
+                      style={{
+                        clipPath:
+                          "polygon(0% 0%, 100% 0%, 100% 100%, 40% 100%, 100% 80%, 0% 90%)",
+                      }}
+                      className="mt-[2px]"
+                    >
+                      {row.ColumnB}
+                    </div>
+                  </div>
+                </div>
+              ) : null
+            )}
+          </div>
+          <div className="flex flex-col gap-3 items-center relative right-[450px] top-[60px]">
+            {secondHalf.map((row: SlotRow, index: number) =>
+              row.ColumnB ? (
+                <div
+                  key={index}
+                  className="flex flex-col gap-3 p-0 w-[150px] h-[120px] relative mb-[60px] bg-[#00000096]"
+                >
+                  <div className="w-[150px] h-[20px] flex justify-center absolute top-[2px] left-[0px]">
+                    <Image
+                      src={
+                        row.ColumnC ||
+                        "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
+                      }
+                      alt=""
+                      className="w-[170px] h-[120px] p-2"
+                      width={100}
+                      height={50}
+                    />
+                  </div>
+                  <div
+                    style={{ backgroundColor: primaryColor }}
+                    className="bg-black w-[100%] h-[40px] absolute top-[120px] text-white font-bebas-neue text-[25px] flex items-center justify-center"
+                  >
+                    <div
+                      style={{
+                        clipPath:
+                          "polygon(0% 0%, 100% 0%, 100% 100%, 40% 100%, 100% 80%, 0% 90%)",
+                      }}
+                      className="mt-[2px]"
+                    >
+                      {row.ColumnB}
+                    </div>
+                  </div>
+                </div>
+              ) : null
+            )}
+          </div>
+        </div>
+
+        {/* Spacer */}
+        <div className="w-[50px]" />
+
+        {/* Right side container */}
+        <div className="flex   absolute">
+          {/* Left side container */}
+          <div className="flex flex-col gap-3 items-center relative left-[920px] top-[60px] ">
+            {fourthHalf.map((row: SlotRow, index: number) =>
+              row.ColumnB ? (
+                <div
+                  key={index}
+                  className="flex flex-col gap-3 p-0 w-[150px] h-[120px] relative mb-[60px] bg-[#00000096]"
+                >
+                  <div className="w-[150px] h-[20px] flex justify-center absolute top-[2px] left-[0px]">
+                    <Image
+                      src={
+                        row.ColumnC ||
+                        "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
+                      }
+                      alt=""
+                      className="w-[170px] h-[120px] p-2"
+                      width={100}
+                      height={50}
+                    />
+                  </div>
+                  <div
+                    style={{ backgroundColor: primaryColor }}
+                    className="bg-black w-[100%] h-[40px] absolute top-[120px] text-white font-bebas-neue text-[25px] flex items-center justify-center"
+                  >
+                    <div
+                      style={{
+                        clipPath:
+                          "polygon(0% 0%, 100% 0%, 100% 100%, 40% 100%, 100% 80%, 0% 90%)",
+                      }}
+                      className="mt-[2px]"
+                    >
+                      {row.ColumnB}
+                    </div>
+                  </div>
+                </div>
+              ) : null
+            )}
+          </div>
+          <div className="flex flex-col gap-3 items-center relative left-[570px] top-[60px]">
+            {thirdHalf.map((row: SlotRow, index: number) =>
+              row.ColumnB ? (
+                <div
+                  key={index}
+                  className="flex flex-col gap-3 p-0 w-[150px] h-[120px] relative mb-[60px] bg-[#00000096]"
+                >
+                  <div className="w-[150px] h-[20px] flex justify-center absolute top-[2px] left-[0px]">
+                    <Image
+                      src={
+                        row.ColumnC ||
+                        "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
+                      }
+                      alt=""
+                      className="w-[170px] h-[120px] p-2"
+                      width={100}
+                      height={50}
+                    />
+                  </div>
+                  <div
+                    style={{ backgroundColor: primaryColor }}
+                    className="bg-black w-[100%] h-[40px] absolute top-[120px] text-white font-bebas-neue text-[25px] flex items-center justify-center"
+                  >
+                    <div
+                      style={{
+                        clipPath:
+                          "polygon(0% 0%, 100% 0%, 100% 100%, 40% 100%, 100% 80%, 0% 90%)",
+                      }}
+                      className="mt-[2px]"
+                    >
+                      {row.ColumnB}
+                    </div>
+                  </div>
+                </div>
+              ) : null
+            )}
+          </div>
+        </div>
+        {/* Border box */}
+        <div className="w-[1080px] h-[1080px] border-white border-[10px] absolute left-[430px] top-[-0px]" />
       </div>
-
-      {/* Spacer */}
-      <div className="w-[50px]" />
-
-      {/* Right side container */}
-      <div className="flex flex-col gap-3 items-center relative left-[500px]">
-        {secondHalf.map((row: SlotRow, index: number) =>
-          row.ColumnB ? (
-            <div
-              key={index}
-              className="flex flex-col gap-3 p-0 w-[450px] h-[140px] relative"
-              style={{ backgroundColor: primaryColor }}
-            >
-              <div className="w-[230px] h-[120px] flex justify-center absolute top-[2px] left-[0px]">
-                <Image
-                  src={
-                    row.ColumnC ||
-                    "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
-                  }
-                  alt=""
-                  className="w-[170px] h-[160px]"
-                />
-              </div>
-              <div
-                className="w-[250px] h-[90px] bg-white flex justify-center items-center font-[300] text-[80px] font-bebas-neue relative top-[20px] left-[220px]"
-                style={{ color: textColor }}
-              >
-                {row.ColumnB}
-              </div>
-            </div>
-          ) : null
-        )}
-      </div>
-
-      {/* Border box */}
-      <div className="w-[1080px] h-[1080px] border-white border-[10px] absolute left-[430px] top-[-0px]" />
     </div>
   );
 };

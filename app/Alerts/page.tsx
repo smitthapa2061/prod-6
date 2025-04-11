@@ -7,6 +7,8 @@ interface Team {
   team_name: string;
   team_logo?: string;
   Alive: number;
+  team_position: number;
+  team_kills: number;
 }
 
 interface MatchResponse {
@@ -88,7 +90,7 @@ const Alerts: React.FC = () => {
 
                   setTimeout(() => {
                     setLatestDeadTeam(null);
-                  }, 5000);
+                  }, 500000);
                 }
 
                 if (team.Alive > 0) {
@@ -116,57 +118,59 @@ const Alerts: React.FC = () => {
 
   return (
     <>
-      {latestDeadTeam && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-          className="Rectangle57 flex align-center justify-evenly relative w-[550px] h-[170px] mx-auto mt-[8rem] p-4"
-          style={{ background: "rgba(0, 0, 0, 0.7)" }}
-        >
-          <motion.img
+      <div className="w-[1920px] h-[1080px] bg-green-300">
+        {latestDeadTeam && (
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            style={{ width: 165, height: 162 }}
-            className="border-r border-white"
-            src={
-              latestDeadTeam.team_logo ||
-              "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
-            }
-            alt="Team Logo"
-          />
-
-          <motion.div
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 1 }}
-            className="font-bebas-neue text-[3.5rem] text-white px-4 absolute top-[80%] right-[-15%]"
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="Rectangle57 flex  justify-evenly relative w-[650px] h-[230px] mx-auto  top-[200px] "
             style={{ background: primaryColor }}
           >
-            ELIMINATED
+            <div
+              style={{
+                clipPath: "polygon( 0% 0%,0% 0%, 0% 100%,90% 90%, 102% 0%)",
+              }}
+              className="bg-white w-[300px] h-[100% ]"
+            >
+              <motion.img
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  width: 210,
+                  height: 200,
+                }}
+                className=" border-white mt-[25px]   "
+                src={
+                  latestDeadTeam.team_logo ||
+                  "https://res.cloudinary.com/dqckienxj/image/upload/v1727161524/default_ryi6uf.png"
+                }
+                alt="Team Logo"
+              />
+            </div>
+            <motion.img
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              style={{ width: 270, height: 362 }}
+              className=" border-white mt-[-60px] relative right-[148px] "
+              src={
+                "https://res.cloudinary.com/dqckienxj/image/upload/v1744299995/light_fbywgi.png"
+              }
+              alt="Team Logo"
+            />
+            <motion.div
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.4 }}
+              className="text-[6rem] font-bebas-neue h-full text-white flex items-center top-[40px] relative "
+            >
+              {latestDeadTeam.team_name || "TEAM NAME"}
+            </motion.div>
           </motion.div>
-
-          <motion.img
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            style={{ width: 165, height: 162 }}
-            className="absolute top-[-45%] left-[-15%]"
-            src="https://res.cloudinary.com/dgzf4h7hn/image/upload/v1730192612/vjvdlphgn8jtyguwfslf.png"
-            alt="eliminated"
-          />
-
-          <motion.div
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 1.4 }}
-            className="text-[6rem] font-bebas-neue h-full text-white flex items-center"
-          >
-            {latestDeadTeam.team_name || "TEAM NAME"}
-          </motion.div>
-        </motion.div>
-      )}
+        )}
+      </div>
     </>
   );
 };
