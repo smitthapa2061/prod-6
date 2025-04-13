@@ -65,7 +65,7 @@ const Lower = async () => {
           style={{ backgroundColor: data.PRIMARY_COLOR }}
         >
           <div
-            className="bg-black text-[2rem] font-bold px-2 py-1 rounded uppercase w-fit  tracking-wider absolute top-[-23px] z-[999] right-6 text-white shadow-xl  font-[orbitron] skew-x-12"
+            className="bg-black text-[2rem] font-bold px-2 py-1 rounded uppercase w-fit  tracking-wider absolute top-[-23px] z-[999] right-6 text-black shadow-xl  font-[orbitron] skew-x-12"
             style={{
               backgroundColor: data.SECONDARY_COLOR,
               color: data.TEXT_COLOR_1,
@@ -92,11 +92,11 @@ const Lower = async () => {
             }}
           >
             <div className="flex flex-col ">
-              <div className="text-[6.2rem] font-bebas-neue relative top-[20px] ">
+              <div className="text-[6.2rem] font-bebas-neue relative top-[20px] text-white ">
                 Match {data.MATCHES}
               </div>
               <div
-                className="bg-black text-[1rem] font-bold px-2 py-1 rounded uppercase w-[180px] h-[35px] tracking-widest font-[orbitron] text-center top-[-10px] left-[20px] relative"
+                className="bg-black text-[1rem] font-bold px-2 py-1 rounded uppercase w-[180px] h-[35px] tracking-widest font-[orbitron] text-center top-[-10px] left-[20px] relative text-black"
                 style={{
                   backgroundColor: data.SECONDARY_COLOR,
                   color: data.TEXT_COLOR_1,
