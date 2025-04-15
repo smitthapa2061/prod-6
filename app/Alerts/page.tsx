@@ -188,7 +188,7 @@ const Alerts: React.FC = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 1.4 }}
                   className="text-[6rem] font-bebas-neue h-full flex items-center top-[0px] relative left-[-10px] flex-col text-white"
-                  style={{ color: setupData.TEXT_COLOR_1 || "white" }}
+                  style={{ color: setupData.TEXT_COLOR_2 || "white" }}
                 >
                   TEAM {latestDeadTeam.team_name || "TEAM NAME"}
                   <div

@@ -6,6 +6,7 @@ import Image from "next/image"; // Import Image from next/image
 
 // Define types for player data and response from the API
 interface Player {
+  team_name: string;
   player_name: string;
   player_photo: string;
   team_logo: string;
@@ -132,7 +133,7 @@ const Dom: React.FC = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="relative left-[-10px]">
+    <div className="relative left-[-10px] ">
       <motion.div
         initial={{ x: -100 }} // Start from the left (x: -100)
         animate={{ x: 10 }} // Slide to the final position (x: 0)
@@ -143,8 +144,10 @@ const Dom: React.FC = () => {
           {playerMilestone && (
             <div className={`relative top-[-70px] ${fontStyle}`}>
               <div
-                className="bg-red-800 w-[90px] h-[90px] absolute mt-[320px] ml-[250px] z-10"
-                style={{ backgroundColor: primaryColor }}
+                className="bg-red-800 w-[60px] h-[60px] absolute mt-[570px] ml-[-0px] z-10"
+                style={{
+                  backgroundColor: primaryColor,
+                }}
               >
                 <Image
                   src={
@@ -156,8 +159,8 @@ const Dom: React.FC = () => {
                   objectFit="contain" // Ensures the image fits within its container
                 />
               </div>
-              <div className="w-[300px] h-[350px] bg-[#000000b5] mt-[360px] absolute z-0">
-                <div className="w-[370px] h-[340px] absolute right-[-30px] mt-[10px]">
+              <div className="w-[280px] h-[160px] bg-[#000000b5] mt-[470px] ml-[-10px] absolute z-0">
+                <div className="w-[370px] h-[340px] absolute right-[-30px] mt-[-163px]">
                   <Image
                     src={
                       playerMilestone.player_photo ||
@@ -170,16 +173,26 @@ const Dom: React.FC = () => {
                 </div>
               </div>
               <div
-                className="w-[300px] h-[100px] bg-red-800 absolute mt-[700px] flex justify-center"
-                style={{ backgroundColor: primaryColor }}
+                className="w-[300px] h-[85px] text-[60px] bg-red-800 absolute mt-[545px] left-[270px] flex justify-center ite"
+                style={{
+                  backgroundColor: primaryColor,
+                  clipPath:
+                    "polygon(100% 0%, 90% 100%, 0% 100%,-40% 0%, 0% 0%,70% 0%,100% 0%)",
+                }}
               >
-                <div className="text-[85px] absolute top-[-10px] text-white">
+                <div style={{}} className=" absolute top-[0px] text-white">
                   {playerMilestone.player_name}
                 </div>
               </div>
-              <div className="bg-white w-[300px] h-[60px] absolute mt-[800px]">
+              <div
+                style={{
+                  clipPath:
+                    "polygon(100% 0%, 90% 100%, 0% 100%,-40% 0%, 0% 0%,70% 0%,100% 0%)",
+                }}
+                className="bg-white w-[300px] h-[74px] absolute mt-[470px] left-[270px]"
+              >
                 {playerMilestone.player_kills >= 3 && (
-                  <div className="text-black absolute ml-[50px] text-[55px] top-[-7px]">
+                  <div className="text-black absolute ml-[50px] text-[55px] top-[0px]">
                     {getMilestoneLabel(playerMilestone.player_kills)}
                   </div>
                 )}

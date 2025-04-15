@@ -15,8 +15,8 @@ interface Player {
   team_logo?: string;
 }
 
-interface SetupRow {
-  ColumnB: string;
+interface SetupMap {
+  [key: string]: string;
 }
 
 interface MatchResponse {
@@ -24,18 +24,18 @@ interface MatchResponse {
   error?: string;
 }
 
-const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws"; // Your Google Sheets API key
-const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo"; // Your Google Sheets ID
+const apiKey = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
+const spreadsheetId = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
 const urlMatchData =
   "https://script.google.com/macros/s/AKfycbwYvL5mfJg-XCSAptLqPZF805aOKjf5U2vRihZIpFLsT3WmZq6onYIhD4rToftUX68xyw/exec";
 const urlSetupData = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/setup!A2:B10?key=${apiKey}`;
 
 const WwcdTeamStats: React.FC = () => {
   const [matchData, setMatchData] = useState<Player[]>([]);
-  const [setupData, setSetupData] = useState<SetupRow[]>([]);
+  const [setup, setSetup] = useState<SetupMap>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [primaryColor, setPrimaryColor] = useState<string | undefined>(); // Optional
+  const [primaryColor, setPrimaryColor] = useState<string>("#850505");
 
   useEffect(() => {
     // Fetch match data
@@ -51,7 +51,7 @@ const WwcdTeamStats: React.FC = () => {
         setLoading(false);
       })
       .catch(() => {
-        setError("Error fetching data.");
+        setError("Error fetching match data.");
         setLoading(false);
       });
 
@@ -59,69 +59,79 @@ const WwcdTeamStats: React.FC = () => {
     axios
       .get<{ values: [string, string][] }>(urlSetupData)
       .then((response) => {
-        const setupValues = response.data.values;
-        if (setupValues) {
-          const formattedSetupData: SetupRow[] = setupValues.map((row) => ({
-            ColumnB: row[1] || "",
-          }));
-          setSetupData(formattedSetupData);
-          setPrimaryColor(setupValues[5]?.[1] || "#850505");
-        }
+        const values = response.data.values;
+        const mapped: SetupMap = {};
+        values.forEach(([key, val]) => {
+          if (key) mapped[key.trim()] = val?.trim() || "";
+        });
+        setSetup(mapped);
+        setPrimaryColor(mapped["PRIMARY COLOR"] || "#850505");
       })
       .catch(() => {
         setError("Error fetching setup data.");
         setLoading(false);
       });
-  }, []); // Empty dependency array ensures this only runs once
+  }, []);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   if (matchData.length === 0) return <p>No match data available.</p>;
 
-  // Find winner
+  // Determine winning team
   const chickenWinner = matchData.find((team) => team.chicken === 1);
   const winningTeam = chickenWinner
     ? chickenWinner
     : matchData.reduce((prev, current) =>
         prev.total_points > current.total_points ? prev : current
       );
-
   const winningPlayers = matchData
     .filter((player) => player.team_name === winningTeam.team_name)
     .slice(0, 4);
 
   return (
-    <div className="font-bebas-neue font-[500]">
+    <div className="font-bebas-neue font-[500]  w-[1920px] h-[1080px]">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 8 }}
         transition={{ duration: 1 }}
       >
         <div className="w-[1980px] h-[1080px] text-white relative">
-          <div className="text-[280px] absolute top-[230px] ml-[30px]">
-            WWCD
+          <div className="text-[140px] absolute top-[0px] ml-[100px] font-teko font-bold">
+            WWCD TEAM STATS
           </div>
-          <div className="text-[140px] absolute top-[490px] ml-[50px]">
-            TEAM STATS
+
+          <div
+            style={{
+              backgroundColor: setup["SECONDARY COLOR"],
+              color: setup["TEXT COLOR 1"],
+            }}
+            className="text-[100px] left-[150px] absolute top-[890px] font-teko  bg-red-800 p-6 h-[180px] scale-75"
+          >
+            {setup["TOR NAME"]} - DAY {setup["DAY"]} - MATCH -{" "}
+            {setup["MATCHES"]}
           </div>
           <div
-            className="w-[600px] h-[88px] absolute top-[870px] ml-[30px] left-[970px] scale-150 text-center"
+            className="w-[200px] h-[68px] p-2 absolute top-[790px] ml-[680px] left-[970px] scale-150 text-center"
             style={{ backgroundColor: primaryColor }}
           >
-            <div className="font-teko font-[300] text-[79px] ml-[10px] mt-[-13px]">
-              {setupData[2]?.ColumnB} | MATCH - {setupData[4]?.ColumnB}
+            <div className="font-teko font-[300] text-[49px] ml-[10px] mt-[-6px]">
+              {setup["ROUND"]} <br />
+              <div className="font-montserrat font-[800] text-[28px]"></div>
             </div>
           </div>
-          <div className="w-[250px] h-[250px] ml-[20px] absolute top-[700px]">
+          <div className="w-[350px] h-[400px] ml-[1570px] absolute top-[210px]">
             <Image
-              src={winningTeam.team_logo || "/default-team-logo.png"}
+              src={
+                winningTeam.team_logo ||
+                "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png"
+              }
               alt={winningTeam.team_name}
               width={250}
               height={250}
               className="w-full h-full object-contain"
             />
           </div>
-          <div className="ml-[270px] absolute top-[690px] text-[200px]">
+          <div className=" absolute top-[520px] text-[200px] ml-[1650px]">
             {winningTeam.team_name}
           </div>
 
@@ -131,14 +141,18 @@ const WwcdTeamStats: React.FC = () => {
             animate={{ opacity: 7, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <div className="absolute left-[610px] top-[0px] flex gap-4">
+            <div className="absolute left-[70px] top-[210px] flex gap-[60]">
               {winningPlayers.map((player, index) => (
                 <div
                   key={index}
-                  style={{ backgroundColor: primaryColor }}
-                  className="w-[323px] h-[700px] text-white text-[30px] font-bold shadow-lg"
+                  style={{
+                    backgroundColor: primaryColor,
+                    clipPath:
+                      "polygon(100% 90%, 80% 100%, 10% 100%,-0% 0%, 0% 0%,0% 0%,100% 5%)",
+                  }}
+                  className="w-[323px] h-[650px] text-white text-[30px] font-bold shadow-lg"
                 >
-                  <div className="w-[500px] h-[500px] relative top-[200px] left-[-50px]">
+                  <div className="w-[500px] h-[500px] relative top-[0px] left-[-50px]">
                     <Image
                       src={
                         player.player_photo ||
@@ -154,41 +168,42 @@ const WwcdTeamStats: React.FC = () => {
                       }}
                     />
                   </div>
-                  <div className="w-[324px] h-[500px] absolute bg-gradient-to-t from-black via-transparent to-[#ffffff00] top-[200px]"></div>
+                  <div className="w-[324px] h-[500px] absolute bg-gradient-to-t from-black via-transparent to-[#ffffff00] top-[00px]"></div>
                   <div
-                    className="relative top-[200px] w-[323px] h-[80px] text-center font-teko font-[300]"
+                    className="relative top-[-100px] w-[323px] h-[90px] text-center font-teko font-[300]"
                     style={{ backgroundColor: primaryColor }}
                   >
-                    <div className="text-[80px] top-[-18px] relative">
+                    <div className="text-[80px] top-[px] relative">
                       {player.player_name}
                     </div>
                   </div>
                   {/* Kills */}
-                  <div className="relative left-[20px] text-white">
-                    <div className="flex flex-col">
-                      <div
-                        className="mt-[-100px] text-[90px] relative top-[-40px]"
-                        style={{ color: primaryColor }}
-                      >
-                        {player.player_kills}
+                  <div className="relative left-[35px] top-[-130px] flex flex-row gap-11  ">
+                    {/* Kills */}
+                    <div className="text-white text-center absolute ml-[30px]">
+                      <div className="flex flex-col items-center">
+                        <div className="text-[90px] relative top-[30px]">
+                          {player.player_kills}
+                        </div>
+                        <span className="font-teko font-[300] relative left-0 top-[-5px]">
+                          Kills
+                        </span>
                       </div>
-                      <span className="font-teko font-[300] relative top-[-80px] left-[3px]">
-                        Kills
-                      </span>
+                    </div>
+
+                    {/* Contribution */}
+                    <div className="text-white text-center mx-auto relative">
+                      <div className="flex flex-col items-center mt-[30px]">
+                        <div className="text-[90px]">
+                          {player.contribution}%
+                        </div>
+                        <span className="font-teko font-[300] absolute top-[130px] left-[-10px]">
+                          CONTRIBUTION
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  {/* Contribution */}
-                  <div className="relative left-[20px] text-white flex flex-col">
-                    <div
-                      className="mt-[-100px] text-[90px] relative top-[-10px]"
-                      style={{ color: primaryColor }}
-                    >
-                      {player.contribution}%
-                    </div>
-                    <span className="font-teko font-[300] relative top-[-50px] left-[3px]">
-                      CONTRIBUTION
-                    </span>
-                  </div>
+
                   <div className="w-[323px] h-[770px] bg-[#000000dc] text-white text-[30px] font-bold shadow-lg mt-[-750px]"></div>
                 </div>
               ))}
