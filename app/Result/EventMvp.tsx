@@ -102,7 +102,7 @@ const EventFragger: React.FC = () => {
               className="w-[1000px] relative "
             >
               <Image
-                src="https://res.cloudinary.com/dqckienxj/image/upload/v1737809848/Layer_6_cnd9gl_ugaxek.png"
+                src={top1.PlayerPhoto}
                 alt="Player Image"
                 width={1000}
                 height={500}

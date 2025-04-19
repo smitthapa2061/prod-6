@@ -188,7 +188,7 @@ const MatchData: React.FC = () => {
                                 >
                                   <Image
                                     src={
-                                      photo ||
+                                      photo[0] ||
                                       "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
                                     }
                                     alt={`Player ${index + 1}`}
