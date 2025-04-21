@@ -42,7 +42,7 @@ const Fragger: React.FC = () => {
 
         // Format the fragger data
         const formattedData: FraggerData[] = values.map((row) => ({
-          team_name: row[0] || "N/A", // Column 0 - Team Name (e.g., "4BS")
+          team_name: row[0] || "name", // Column 0 - Team Name (e.g., "4BS")
           team_logo:
             row[1] ||
             "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png", // Column 1 - Team Logo (e.g., logo URL)
@@ -169,8 +169,9 @@ const Fragger: React.FC = () => {
                 <div className="text-white w-[490px] relative right-[80px] top-[0px] mb-[400px]">
                   <Image
                     src={
-                      row.player_photo ||
-                      "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+                      !row.player_photo || row.player_photo === "#N/A"
+                        ? "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+                        : row.player_photo
                     }
                     alt="Player"
                     width={800}
