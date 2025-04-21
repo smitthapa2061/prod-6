@@ -17,7 +17,7 @@ interface PlayerData {
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
 const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
 
-const range = "overall1!A2:P25";
+const range = "overall1!A2:O100";
 const range2 = "setup!A2:B10";
 
 const fadeInAnimation = {
@@ -38,11 +38,13 @@ const EventFragger: React.FC = () => {
         const values = response.data.values || [];
 
         const formattedData: PlayerData[] = values.map((row: string[]) => ({
-          playerName: row[6] || "",
+          playerName: row[6] || "0",
           playerkills: row[7] || "0",
           teamTag: row[0] || 0,
-          teamLogo: row[1] || "",
-          PlayerPhoto: row[8] || "",
+          teamLogo: row[1] || "0",
+          PlayerPhoto:
+            row[8] ||
+            "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png",
           kd: row[5] || "0",
           contribution: row[10] || "0",
         }));
@@ -58,11 +60,10 @@ const EventFragger: React.FC = () => {
           setPrimaryColor(primaryColorValue[1] || "#FF0000");
         }
 
-        const sortedData = formattedData.sort(
-          (a, b) =>
-            (typeof b.playerkills === "number" ? b.playerkills : 0) -
-            (typeof a.playerkills === "number" ? a.playerkills : 0)
-        );
+        const sortedData = formattedData
+          .filter((p) => !isNaN(Number(p.playerkills))) // Filter valid numbers
+          .sort((a, b) => Number(b.playerkills) - Number(a.playerkills));
+
         setTop1(sortedData[0]);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -102,7 +103,10 @@ const EventFragger: React.FC = () => {
               className="w-[1000px] relative "
             >
               <Image
-                src={top1.PlayerPhoto}
+                src={
+                  top1.PlayerPhoto ||
+                  "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+                }
                 alt="Player Image"
                 width={1000}
                 height={500}

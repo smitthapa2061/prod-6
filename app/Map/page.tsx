@@ -1,3 +1,4 @@
+
 import React from "react";
 import Image from "next/image"; // Make sure you import Image from Next.js
 import { div } from "framer-motion/client";

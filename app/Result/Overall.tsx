@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // Import axios
+import axios from "axios";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-// Define the types for the fetched data
 interface RowData {
-  ColumnA: string | null; // Team Name
-  ColumnB: string; // Logo URL
-  ColumnC: number; // Kills
-  ColumnD: number; // Placement
-  ColumnE: number; // WWCD
-  ColumnF: number; // Total Score
-  ColumnG: number; // Sorting Score
+  ColumnA: string | null;
+  ColumnB: string;
+  ColumnC: number;
+  ColumnD: number;
+  ColumnE: number;
+  ColumnF: number;
+  ColumnG: number;
 }
 
 interface SetupDataRow {
@@ -19,40 +18,40 @@ interface SetupDataRow {
 }
 
 interface GoogleSheetsResponse {
-  values: string[][]; // The data structure returned by the Google Sheets API
+  values: string[][];
 }
 
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
 const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
-
-const range = "overall1!A2:P100"; // Range you want to fetch (adjust this as needed)
-const range2 = "setup!A2:B10"; // Another range for setup data
+const range = "overall1!A2:P100";
+const range2 = "setup!A2:B10";
 
 const Overall: React.FC = () => {
   const [data, setData] = useState<RowData[]>([]);
   const [data2, setData2] = useState<SetupDataRow[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [visibleColumn, setVisibleColumn] = useState(0);
+  const batchSize = 10;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
         const response = await axios.get<GoogleSheetsResponse>(url);
-
         const values = response.data.values || [];
 
         const seen = new Set<string>();
         const formattedData: RowData[] = values
           .map((row) => ({
-            ColumnA: row[0] || null, // Team Name
+            ColumnA: row[0] || null,
             ColumnB:
               row[1] ||
-              "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png", // Logo
-            ColumnC: row[3] ? parseInt(row[3], 10) : 0, // Kills
-            ColumnD: row[4] ? parseInt(row[4], 10) : 0, // Placement (Position Points)
-            ColumnE: row[9] ? parseInt(row[9], 10) : 0, // WWCD
-            ColumnF: row[2] ? parseInt(row[2], 10) : 0, // Total Score (from column 2)
-            ColumnG: row[10] ? parseInt(row[10], 10) : 0, // Contribution Score
+              "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png",
+            ColumnC: row[3] ? parseInt(row[3], 10) : 0,
+            ColumnD: row[4] ? parseInt(row[4], 10) : 0,
+            ColumnE: row[9] ? parseInt(row[9], 10) : 0,
+            ColumnF: row[2] ? parseInt(row[2], 10) : 0,
+            ColumnG: row[10] ? parseInt(row[10], 10) : 0,
           }))
           .filter((row) => {
             if (!row.ColumnA) return false;
@@ -75,7 +74,7 @@ const Overall: React.FC = () => {
         setData2(formattedData2);
       } catch (err: unknown) {
         if (err instanceof Error) {
-          setError(err.message); // Now we safely access 'message'
+          setError(err.message);
         } else {
           setError("An unknown error occurred");
         }
@@ -85,274 +84,164 @@ const Overall: React.FC = () => {
     fetchData();
   }, []);
 
-  // Dynamically divide data into two equal parts
+  useEffect(() => {
+    if (data.length === 0) return;
+    const totalPages = Math.ceil(data.length / batchSize);
+    const interval = setInterval(() => {
+      setVisibleColumn((prev) => (prev + 1) % totalPages);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [data]);
+
   const sortedData = [...data].sort((a, b) => {
-    // Total Score (highest first)
     if (b.ColumnF !== a.ColumnF) return b.ColumnF - a.ColumnF;
-
-    // Placement Points (lower is better)
     if (a.ColumnD !== b.ColumnD) return b.ColumnD - a.ColumnD;
-
-    // Kills (more is better)
     if (b.ColumnC !== a.ColumnC) return b.ColumnC - a.ColumnC;
-
-    // WWCD (more is better)
     return b.ColumnE - a.ColumnE;
   });
 
-  const half = Math.ceil(sortedData.length / 2);
-  const firstColumnData = sortedData.slice(0, half); // Top-ranking teams
-  const secondColumnData = sortedData.slice(half); // Lower-ranking teams
+  const startIndex = visibleColumn * batchSize;
+  const endIndex = Math.min(startIndex + batchSize, sortedData.length);
+  const currentVisibleData = sortedData.slice(startIndex, endIndex);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (error) return <div>Error: {error}</div>;
+  if (data.length === 0) return <div>Loading...</div>;
 
-  if (data.length === 0) {
-    return <div>Loading...</div>;
-  }
   return (
-    <div className="w-[1920px] h-[1080px]">
+    <div className="w-[1920px] h-[1080px] bg-yellow">
+      <div className="text-white text-[140px] font-[600] mb-[-120px] font-[teko] relative top-[-15px] left-[156px]">
+        OVERALL RANKING
+      </div>
+      {data2.length > 0 && (
+        <div
+          style={{ backgroundColor: `${data2[5].ColumnB}` }}
+          className="w-[900px] h-[60px] mb-[-40px] relative left-[165px] text-[40px] text-white font-[montserrat] font-[700] text-left tracking-wider top-[50px] pl-[20px]"
+        >
+          {data2[2].ColumnB} | DAY - {data2[3].ColumnB} | MATCH -{" "}
+          {data2[4].ColumnB}
+        </div>
+      )}
+
       <motion.div
+        key={visibleColumn} // This retriggers animation on page change
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }} // Fade out on exit
+        exit={{ opacity: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="text-white text-[130px] font-[500] text-center mb-[-100px] font-bebas-neue relative top-[-15px]">
-          OVERALL RANKING
-        </div>
         {data2.length > 0 && (
           <div>
             <div
               style={{
-                backgroundColor: `${data2[5].ColumnB}`,
-              }}
-              className="w-[1000px] h-[60px] bg-[white] mb-[-40px] relative left-[465px] text-[40px] text-white font-[orbitron] font-[800] text-center tracking-wider top-[50px]"
-            >
-              <div className="relative top-[0px]">
-                {data2[2].ColumnB} | DAY - {data2[3].ColumnB} | MATCH -{" "}
-                {data2[4].ColumnB}
-              </div>
-            </div>
-            <div
-              style={{
+                clipPath: "polygon(0% 100%,100% 100%,100% 0%, 2% 10%)",
                 borderColor: `${data2[5].ColumnB}`,
               }}
-              className="w-[769px] h-[35px] bg-white mb-[-80px] relative left-[145px] border-red-800 border-[1px] top-[110px]"
+              className="w-[1321px] h-[35px] bg-white mb-[-80px] relative left-[75px] border-[1px] top-[110px]"
             >
-              <div className="flex ">
+              <div className="flex">
                 <div
-                  style={{
-                    color: `${data2[5].ColumnB}`,
-                  }}
-                  className="flex font-[orbitron] font-[800] text-[20px] text-red-800 tracking-wider "
+                  style={{ color: `${data2[5].ColumnB}` }}
+                  className="flex font-[montserrat] font-[800] text-[24px] tracking-wider"
                 >
                   <div className="ml-[40px]">#</div>
-                  <div className="ml-[40px]">TEAM</div>
-                  <div className="ml-[190px]">WWCD</div>
-                  <div className="ml-[23px]">PLACE</div>
-                  <div className="ml-[23px]">KILLS</div>
-                  <div className="ml-[23px]">TOTAL</div>
+                  <div className="ml-[80px]">TEAM</div>
+                  <div className="ml-[570px]">WWCD</div>
+                  <div className="ml-[40px]">PLACE</div>
+                  <div className="ml-[63px]">KILLS</div>
+                  <div className="ml-[60px]">TOTAL</div>
                 </div>
               </div>
             </div>
-            <div
-              style={{
-                borderColor: `${data2[5].ColumnB}`,
-              }}
-              className="w-[769px] h-[35px] bg-white mb-[-30px] relative left-[1010px] border-red-800 border-[1px] top-[155px]"
+
+            <motion.div
+              key={visibleColumn} // Ensures animation retriggers on visibleColumn change
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              className="grid grid-cols-2 gap-4 relative top-[180px] font-bebas-neue font-[500] left-[0px]"
             >
-              <div className="flex ">
-                <div
-                  style={{
-                    color: `${data2[5].ColumnB}`,
-                  }}
-                  className="flex font-[orbitron] font-[800] text-[20px] text-red-800 tracking-wider "
-                >
-                  <div className="ml-[40px]">#</div>
-                  <div className="ml-[40px]">TEAM</div>
-                  <div className="ml-[190px]">WWCD</div>
-                  <div className="ml-[23px]">PLACE</div>
-                  <div className="ml-[23px]">KILLS</div>
-                  <div className="ml-[23px]">TOTAL</div>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 relative top-[180px] font-bebas-neue font-[500] left-[10px]">
-              {/* First Column */}
               <ul>
-                {firstColumnData.map((row, index) => (
-                  <motion.div
-                    className="p-4 mb-2 w-[800px] h-[65px] relative left-[120px] flex"
-                    key={index}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.5,
-                      ease: "easeOut",
-                      delay: index * 0.2,
-                    }} // Staggered animation
-                  >
-                    {/* First Red Box */}
-                    <div
-                      style={{
-                        backgroundColor: `${data2[5].ColumnB}`,
+                {currentVisibleData.map((row, index) => {
+                  const displayIndex = startIndex + index + 1;
+                  return (
+                    <motion.div
+                      className="p-4 mb-2 w-[1800px] h-[65px] relative left-[60px] flex"
+                      key={index}
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.5,
+                        ease: "easeOut",
+                        delay: index * 0.2,
                       }}
-                      className="bg-red-800 text-white w-[150px] h-[63px] text-[58px] flex justify-center items-center"
                     >
-                      <div className="relative top-[4px]">{index + 1}</div>
-                    </div>
-
-                    {/* Second Black Box */}
-                    <div className="bg-[#000000cf] w-[460px] h-[63px] flex">
-                      <div className="w-[62px] h-[62px]">
-                        <Image
-                          src={row.ColumnB || ""}
-                          alt="Team Logo"
-                          width={62}
-                          height={62}
-                          className="w-full h-full object-cover"
-                        />
+                      <div
+                        style={{
+                          backgroundColor: `${data2[5].ColumnB}`,
+                          clipPath:
+                            "polygon(100% 100%,100% 100%,100% -90%, -50% 100%)",
+                        }}
+                        className="w-[100px] h-[63px] text-[58px] flex justify-center items-center text-white"
+                      >
+                        <div className="relative top-[4px]">{displayIndex}</div>
                       </div>
-
-                      <div className="text-white text-[58px] mt-[-7px] ml-[10px]">
-                        {row.ColumnA}
+                      <div className="bg-[#000000cf] w-[660px] h-[63px] flex">
+                        <div className="w-[62px] h-[62px]">
+                          <Image
+                            src={row.ColumnB || ""}
+                            alt="Team Logo"
+                            width={62}
+                            height={62}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="text-white text-[58px] mt-[-7px] ml-[10px]">
+                          {row.ColumnA}
+                        </div>
                       </div>
-                    </div>
-
-                    {/* Third Red Box */}
-                    <div
-                      style={{
-                        backgroundColor: `${data2[5].ColumnB}`,
-                      }}
-                      className="bg-red-800 text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
-                    >
-                      {row.ColumnE}
-                    </div>
-
-                    {/* Fourth Red Box */}
-                    <div
-                      style={{
-                        backgroundColor: `${data2[5].ColumnB}`,
-                      }}
-                      className="bg-red-800 text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
-                    >
-                      {row.ColumnD}
-                    </div>
-
-                    {/* Fifth Red Box */}
-                    <div
-                      style={{
-                        backgroundColor: `${data2[5].ColumnB}`,
-                      }}
-                      className="bg-red-800 text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
-                    >
-                      {row.ColumnC}
-                    </div>
-
-                    {/* Sixth Red Box */}
-                    <div
-                      style={{
-                        backgroundColor: `${data2[5].ColumnB}`,
-                      }}
-                      className="bg-red-800 text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
-                    >
-                      {row.ColumnF}
-                    </div>
-                  </motion.div>
-                ))}
+                      <div
+                        style={{ backgroundColor: `${data2[5].ColumnB}` }}
+                        className="text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
+                      >
+                        {row.ColumnE}
+                      </div>
+                      <div
+                        style={{ backgroundColor: `${data2[5].ColumnB}` }}
+                        className="text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
+                      >
+                        {row.ColumnD}
+                      </div>
+                      <div
+                        style={{ backgroundColor: `${data2[5].ColumnB}` }}
+                        className="text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
+                      >
+                        {row.ColumnC}
+                      </div>
+                      <div
+                        style={{
+                          backgroundColor: `${data2[6].ColumnB}`,
+                          color: `${data2[7].ColumnB}`,
+                        }}
+                        className="w-[140px] h-[63px] flex justify-center items-center text-[56px]"
+                      >
+                        {row.ColumnF}
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </ul>
-
-              {/* Second Column */}
-              <ul>
-                {secondColumnData.map((row, index) => (
-                  <motion.div
-                    className="p-4 mb-2 w-[800px] h-[65px] relative left-[20px] flex"
-                    key={index}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.5,
-                      ease: "easeOut",
-                      delay: index * 0.2,
-                    }}
-                  >
-                    {/* First Red Box */}
-                    <div
-                      style={{
-                        backgroundColor: `${data2[5].ColumnB}`,
-                      }}
-                      className="bg-red-800 text-white w-[150px] h-[63px] text-[58px] flex justify-center items-center"
-                    >
-                      <div className="relative top-[4px]">
-                        {index + half + 1}
-                      </div>
-                    </div>
-
-                    {/* Second Black Box */}
-                    <div className="bg-[#000000cf] w-[460px] h-[63px] flex">
-                      <div className="w-[62px] h-[62px]">
-                        <Image
-                          src={row.ColumnB || ""}
-                          alt="Team Logo"
-                          width={62}
-                          height={62}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-
-                      <div className="text-white text-[58px] mt-[-7px] ml-[10px]">
-                        {row.ColumnA}
-                      </div>
-                    </div>
-
-                    {/* Third Red Box */}
-                    <div
-                      style={{
-                        backgroundColor: `${data2[5].ColumnB}`,
-                      }}
-                      className="bg-red-800 text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
-                    >
-                      {row.ColumnE}
-                    </div>
-
-                    {/* Fourth Red Box */}
-                    <div
-                      style={{
-                        backgroundColor: `${data2[5].ColumnB}`,
-                      }}
-                      className="bg-red-800 text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
-                    >
-                      {row.ColumnD}
-                    </div>
-
-                    {/* Fifth Red Box */}
-                    <div
-                      style={{
-                        backgroundColor: `${data2[5].ColumnB}`,
-                      }}
-                      className="bg-red-800 text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
-                    >
-                      {row.ColumnC}
-                    </div>
-
-                    {/* Sixth Red Box */}
-                    <div
-                      style={{
-                        backgroundColor: `${data2[5].ColumnB}`,
-                      }}
-                      className="bg-red-800 text-white w-[140px] h-[63px] flex justify-center items-center text-[56px]"
-                    >
-                      {row.ColumnF}
-                    </div>
-                  </motion.div>
-                ))}
-              </ul>
-            </div>
+            </motion.div>
           </div>
         )}
       </motion.div>
+      <Image
+        className="flex fixed top-[270px] left-[1290px]"
+        width={800}
+        height={500}
+        src="https://res.cloudinary.com/dqckienxj/image/upload/v1745194575/Layer_1_j7bfyq.png"
+        alt="gello"
+      />
     </div>
   );
 };

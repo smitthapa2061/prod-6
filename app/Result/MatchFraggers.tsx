@@ -139,7 +139,7 @@ const MatchFragger: React.FC = () => {
                 </div>
 
                 {/* Team Photo */}
-                <div className="text-white w-[450px] h-[400px] relative right-[50px] top-[10px]">
+                <div className="text-white w-[450px] h-[400px] relative right-[50px] top-[0px]">
                   <Image
                     src={
                       team.player_photo ||

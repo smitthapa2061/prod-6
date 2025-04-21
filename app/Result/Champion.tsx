@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
-import Image from "next/image"; // Import Image from next/image
+import Image from "next/image";
 
 // Define types for the fetched data
 interface TeamData {
@@ -10,12 +10,13 @@ interface TeamData {
   totalkills: number;
   rankpoint: number;
   totalpoints: number;
+  player_photo: string;
 }
 
 const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
 const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
 
-const range = "overall1!A2:G25"; // Range for overall data
+const range = "overall1!A2:O100"; // Range for overall data
 const range2 = "setup!A2:B10"; // Range for setup data (primary color)
 
 const fadeInAnimation = {
@@ -25,51 +26,50 @@ const fadeInAnimation = {
 
 const SecondRunner: React.FC = () => {
   const [top1, setTop1] = useState<TeamData | null>(null);
-  const [primaryColor, setPrimaryColor] = useState<string>("#FF0000"); // Default red color
+  const [formattedData, setFormattedData] = useState<TeamData[]>([]);
+  const [primaryColor, setPrimaryColor] = useState<string>("#FF0000");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch data from Google Sheets API
     const fetchData = async () => {
       try {
-        // Fetch main team data
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
         const response = await axios.get<{ values: string[][] }>(url);
         const values = response.data.values || [];
 
-        // Process data
-        const formattedData: TeamData[] = values.map((row: string[]) => ({
+        const data: TeamData[] = values.map((row: string[]) => ({
           teamTag: row[0] || "",
-          teamLogo: row[1] || "https://default-image-url.com", // Fallback logo
+          teamLogo: row[1] || "https://default-image-url.com",
           totalkills: row[3] ? parseInt(row[3], 10) : 0,
           rankpoint: row[4] ? parseInt(row[4], 10) : 0,
           totalpoints: row[2] ? parseInt(row[2], 10) : 0,
+          player_photo:
+            row[8] ||
+            "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png",
         }));
 
-        // Remove duplicates based on teamTag while keeping player data intact
-        const uniqueTeams = formattedData.filter(
+        const uniqueTeams = data.filter(
           (value, index, self) =>
             index === self.findIndex((t) => t.teamTag === value.teamTag)
         );
 
-        // Fetch primary color data
+        setFormattedData(data);
+
         const url2 = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range2}?key=${apiKey}`;
         const response2 = await axios.get<{ values: string[][] }>(url2);
         const values2 = response2.data.values || [];
 
-        // Extract primary color
         const primaryColorValue = values2.find(
           (row) => row[0] === "PRIMARY COLOR"
         );
         if (primaryColorValue) {
-          setPrimaryColor(primaryColorValue[1] || "#FF0000"); // Fallback to red if no color found
+          setPrimaryColor(primaryColorValue[1] || "#FF0000");
         }
 
-        // Set top 1 data
         const sortedData = uniqueTeams.sort(
           (a, b) => b.totalpoints - a.totalpoints
         );
-        setTop1(sortedData[0]); // Assuming the top team is the one with the third highest total points
+        setTop1(sortedData[0]);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "An unknown error occurred"
@@ -77,61 +77,43 @@ const SecondRunner: React.FC = () => {
       }
     };
 
-    fetchData(); // Fetch the data when the component mounts
+    fetchData();
   }, []);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!top1) {
-    return <div>Loading...</div>;
-  }
+  if (error) return <div>Error: {error}</div>;
+  if (!top1) return <div>Loading...</div>;
 
   return (
     <>
       {top1 && (
         <motion.div
-          variants={fadeInAnimation} // Using the fadeInAnimation defined above
+          variants={fadeInAnimation}
           initial="hidden"
           animate="visible"
           className="Group6 h-[1080px] w-[1920px]"
           style={{ position: "relative" }}
         >
-          <div className="h-[1080px] flex w-[1920px] items-start top-[120px] relative ">
-            <motion.img
-              initial={{ x: -800 }}
-              animate={{ x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="w-[800px] relative right-[116px] "
-              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-              alt="Team Image"
-            />
-            <motion.img
-              initial={{ x: -800 }}
-              animate={{ x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="w-[800px] relative right-[424px]"
-              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-              alt="Team Image"
-            />
-            <motion.img
-              initial={{ x: -800 }}
-              animate={{ x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="w-[800px] relative right-[800px]"
-              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-              alt="Player Image"
-            />
-            <motion.img
-              initial={{ x: -800 }}
-              animate={{ x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="w-[800px] relative right-[1108px]"
-              src="https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
-              alt="Player Image"
-            />
+          <div className="h-[1080px] flex w-[1920px] items-start top-[120px] relative">
+            {formattedData
+              .filter((p: TeamData) => p.teamTag === top1.teamTag)
+              .slice(0, 4)
+              .map((player: TeamData, index: number) => (
+                <motion.img
+                  key={index}
+                  initial={{ x: -800 }}
+                  animate={{ x: 0 }}
+                  transition={{ duration: 0.5 + index * 0.2 }}
+                  className="w-[800px] relative top-[40px]"
+                  style={{ right: `${16 + 258 * index}px` }}
+                  src={
+                    player.player_photo ||
+                    "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
+                  }
+                  alt={`Player ${index + 1}`}
+                />
+              ))}
           </div>
+
           <div className="relative bottom-[300px]">
             <div>
               <div
@@ -169,7 +151,7 @@ const SecondRunner: React.FC = () => {
                       initial={{ opacity: 0, y: -40 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5, delay: 0.3 }}
-                      className="flex justify-center font-bebas-neue  items-start relative bottom-[55px] text-[256px] text-white"
+                      className="flex justify-center font-bebas-neue items-start relative bottom-[55px] text-[256px] text-white"
                     >
                       CHAMPIONS
                     </motion.div>
@@ -203,7 +185,7 @@ const SecondRunner: React.FC = () => {
                       initial={{ opacity: 0, x: -40 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: 0.7 }}
-                      className="flex justify-center font-[300] items-start text-6xl text-white font-teko "
+                      className="flex justify-center font-[300] items-start text-6xl text-white font-teko"
                     >
                       TOTAL-{top1.totalpoints}
                     </motion.div>
