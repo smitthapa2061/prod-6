@@ -108,7 +108,7 @@ const MatchData: React.FC = () => {
     if (currentPage === 1) {
       const timer = setTimeout(() => {
         setCurrentPage(2);
-      }, 25000);
+      }, 40000);
 
       return () => clearTimeout(timer); // Clean up the timer on unmount
     }
@@ -117,10 +117,10 @@ const MatchData: React.FC = () => {
   const pageData =
     currentPage === 1
       ? matchData.filter(
-          (team, index) => index >= 5 && index <= 13 && team.team_name
+          (team, index) => index >= 5 && index <= 14 && team.team_name
         )
       : matchData.filter(
-          (team, index) => index >= 14 && index <= 24 && team.team_name
+          (team, index) => index >= 15 && index <= 24 && team.team_name
         );
 
   if (loading) return <p>Loading...</p>;

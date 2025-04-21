@@ -196,9 +196,7 @@ const Alerts: React.FC = () => {
                       backgroundColor: setupData.SECONDARY_COLOR || "#eee",
                     }}
                     className="bg-black w-[210px] h-[50px] absolute top-[130px] left-[-50px] text-black font-[montserrat] font-bold text-[30px] pl-[10px]"
-                  >
-                    PLACE - #{latestDeadTeam.team_position}
-                  </div>
+                  ></div>
                   <div
                     style={{
                       backgroundColor: setupData.SECONDARY_COLOR || "#eee",

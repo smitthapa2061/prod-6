@@ -89,7 +89,7 @@ const Overall: React.FC = () => {
     const totalPages = Math.ceil(data.length / batchSize);
     const interval = setInterval(() => {
       setVisibleColumn((prev) => (prev + 1) % totalPages);
-    }, 10000);
+    }, 40000);
     return () => clearInterval(interval);
   }, [data]);
 

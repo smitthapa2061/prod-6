@@ -96,7 +96,7 @@ const WwcdTeamStats: React.FC = () => {
         transition={{ duration: 1 }}
       >
         <div className="w-[1980px] h-[1080px] text-white relative">
-          <div className="text-[140px] absolute top-[0px] ml-[100px] font-teko font-bold">
+          <div className="text-[140px] absolute top-[0px] ml-[160px] font-teko font-bold">
             WWCD TEAM STATS
           </div>
 
@@ -105,17 +105,17 @@ const WwcdTeamStats: React.FC = () => {
               backgroundColor: setup["SECONDARY COLOR"],
               color: setup["TEXT COLOR 1"],
             }}
-            className="text-[100px] left-[150px] absolute top-[890px] font-teko  bg-red-800 p-6 h-[180px] scale-75"
+            className="text-[100px] left-[260px] absolute top-[890px] font-teko  bg-red-800  h-[130px] scale-75 pl-[30px] pr-[30px]"
           >
             {setup["TOR NAME"]} - DAY {setup["DAY"]} - MATCH -{" "}
             {setup["MATCHES"]}
           </div>
           <div
-            className="w-[200px] h-[68px] p-2 absolute top-[790px] ml-[680px] left-[970px] scale-150 text-center"
+            className="w-[200px] h-[60px] p-2 absolute top-[790px] ml-[670px] left-[970px] scale-150 text-center flex justify-center "
             style={{ backgroundColor: primaryColor }}
           >
-            <div className="font-teko font-[300] text-[49px] ml-[10px] mt-[-6px]">
-              {setup["ROUND"]} <br />
+            <div className="font-teko font-[300] text-[45px] relative top-[-7px]">
+              {setup["ROUND"]}
               <div className="font-montserrat font-[800] text-[28px]"></div>
             </div>
           </div>
@@ -131,7 +131,7 @@ const WwcdTeamStats: React.FC = () => {
               className="w-full h-full object-contain"
             />
           </div>
-          <div className=" absolute top-[520px] text-[200px] ml-[1650px]">
+          <div className=" absolute top-[520px] text-[100px] ml-[1600px]">
             {winningTeam.team_name}
           </div>
 
@@ -152,7 +152,7 @@ const WwcdTeamStats: React.FC = () => {
                   }}
                   className="w-[323px] h-[650px] text-white text-[30px] font-bold shadow-lg"
                 >
-                  <div className="w-[500px] h-[500px] relative top-[0px] left-[-50px]">
+                  <div className="w-[500px] h-[500px] relative top-[0px] left-[-70px]">
                     <Image
                       src={
                         player.player_photo ||
@@ -162,10 +162,6 @@ const WwcdTeamStats: React.FC = () => {
                       width={500}
                       height={500}
                       className="w-full h-full object-cover"
-                      style={{
-                        clipPath:
-                          "polygon(10% 10%, 64% 0, 100% 100%,80% -15%,74% 100%, 10% 100%)",
-                      }}
                     />
                   </div>
                   <div className="w-[324px] h-[500px] absolute bg-gradient-to-t from-black via-transparent to-[#ffffff00] top-[00px]"></div>
@@ -192,12 +188,12 @@ const WwcdTeamStats: React.FC = () => {
                     </div>
 
                     {/* Contribution */}
-                    <div className="text-white text-center mx-auto relative">
-                      <div className="flex flex-col items-center mt-[30px]">
-                        <div className="text-[90px]">
+                    <div className="text-white text-center mx-auto relative top-[30px]">
+                      <div className="flex flex-col text-center mt-[30px]">
+                        <div className="text-[50px]">
                           {player.contribution}%
                         </div>
-                        <span className="font-teko font-[300] absolute top-[130px] left-[-10px]">
+                        <span className="font-teko font-[300] absolute top-[80px] left-[-10px]">
                           CONTRIBUTION
                         </span>
                       </div>

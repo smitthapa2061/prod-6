@@ -31,12 +31,17 @@ const SlotListData = () => {
           `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`
         );
         const data = await res.json();
-        const mappedData = data.values.map((row: string[]) => ({
-          ColumnA: row[0] || "",
-          ColumnB: row[1] || "",
-          ColumnC: row[2] || "",
-          ColumnD: row[3] || "",
-        }));
+        const mappedData: SlotData[] = (data.values as string[][])
+          .map(
+            (row: string[]): SlotData => ({
+              ColumnA: row[0] || "",
+              ColumnB: row[1] || "",
+              ColumnC: row[2] || "",
+              ColumnD: row[3] || "",
+            })
+          )
+          .filter((row) => row.ColumnB !== "");
+
         setSlotList(mappedData);
       } catch (err) {
         console.error("Failed to fetch slot list:", err);
@@ -53,9 +58,14 @@ const SlotListData = () => {
           `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`
         );
         const data = await res.json();
-        const mappedData = data.values.map((row: string[]) => ({
-          ColumnB: row[1] || "",
-        }));
+        const mappedData: SetupData[] = (data.values as string[][])
+          .map(
+            (row: string[]): SetupData => ({
+              ColumnB: row[1] || "",
+            })
+          )
+          .filter((row) => row.ColumnB !== "");
+
         setSetupData(mappedData);
       } catch (err) {
         console.error("Failed to fetch setup data:", err);
@@ -82,25 +92,21 @@ const SlotListData = () => {
 
   return (
     <div className="w-[1920px] h-[1080px] ">
-      <div className="text-white text-[140px] font-[teko] w-[980px] h-[170px] border border-transparent rounded-[10px] flex justify-center font-[800] relative left-[90px] top-[-70px] mb-[70px]">
+      <div className="text-white text-[140px] font-[teko] w-[980px] h-[170px] border border-transparent rounded-[10px] flex justify-center font-[800] relative left-[550px] top-[-120px] mb-[70px]">
         <div className="relative top-[160px]">{setupData[0]?.ColumnB}</div>
       </div>
-      <img
-        src={setupData[1]?.ColumnB}
-        alt=""
-        className="w-[200px] h-[200px]  left-[1600px] top-[60px] absolute"
-      />
+
       {setupData.length > 0 && (
         <div
           style={{ backgroundColor: setupData[5]?.ColumnB || "white" }}
-          className="w-[900px] h-[70px] mb-[px] relative left-[75px] text-[60px] text-white font-[orbitron] font-[800] text-center tracking-wider top-[700px]"
+          className="w-[900px] h-[70px] mb-[px] relative left-[575px] text-[50px] text-white font-[orbitron] font-[800] text-center tracking-wider top-[700px]"
         >
-          <div className="relative top-[-9px]">
+          <div className="relative top-[-3px]">
             {setupData[2]?.ColumnB} - DAY {setupData[3]?.ColumnB}
           </div>
         </div>
       )}
-      <div className="grid grid-cols-5 p-[270px] scale-60 relative left-[-770px] top-[560px] mr-[20px]">
+      <div className="grid grid-cols-4 p-[270px] scale-60 relative left-[-480px] top-[560px] mr-[20px]">
         {setupData.length > 0 &&
           visibleSlotList.map((row, index) => (
             <div
