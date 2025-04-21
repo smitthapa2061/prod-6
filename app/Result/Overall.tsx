@@ -43,7 +43,7 @@ const Overall: React.FC = () => {
         const seen = new Set<string>();
         const formattedData: RowData[] = values
           .map((row) => ({
-            ColumnA: row[0] || null,
+            ColumnA: row[15] || null,
             ColumnB:
               row[1] ||
               "https://res.cloudinary.com/dqckienxj/image/upload/v1730785916/default_ryi6uf_edmapm.png",
