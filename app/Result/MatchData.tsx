@@ -33,7 +33,7 @@ const MatchData: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const urlMatchData =
-    "https://script.google.com/macros/s/AKfycbwkdYFWoAOXZ0zCbdYRH1wjVrTZxhhKjfj5jjGegL-JCLrKBXy7NhMSp7k3vteKp5HhDw/exec";
+    "https://script.google.com/macros/s/AKfycbwqzaYqLPRoUR2G_GkuJU1L5nMB9cOT5GvWzxC1ym5lLZaYNBy0wunKS4rj1Mo2JWF1Lw/exec";
 
   const urlSetupData = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/setup!A2:B10?key=${apiKey}`;
 
