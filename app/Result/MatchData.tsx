@@ -14,7 +14,8 @@ type Team = {
   player_photos: string[];
   chicken: number;
   player_rank?: number;
-  player_logo?: string; // Add player_logo field to the Team type
+  player_logo?: string;
+  exclude: boolean; // <<< Add this line
 };
 
 type SetupData = {
@@ -54,7 +55,7 @@ const MatchData: React.FC = () => {
 
         // Remove duplicates based on team_name and filter out rows with player_rank
         const uniqueData = data
-          .filter((team) => !team.player_rank) // Exclude rows where player_rank is truthy
+          .filter((team) => !team.exclude) // Exclude rows where player_rank is truthy
           .reduce<Team[]>((acc, team) => {
             const existingTeam = acc.find(
               (item) => item.team_name === team.team_name
