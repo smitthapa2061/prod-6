@@ -24,7 +24,7 @@ const UpperStats: React.FC = () => {
   const [isVisible, setIsVisible] = useState<boolean>(true); // State to manage visibility
 
   const matchDataUrl =
-    "https://script.google.com/macros/s/AKfycbwYvL5mfJg-XCSAptLqPZF805aOKjf5U2vRihZIpFLsT3WmZq6onYIhD4rToftUX68xyw/exec";
+    "https://script.google.com/macros/s/AKfycbwkdYFWoAOXZ0zCbdYRH1wjVrTZxhhKjfj5jjGegL-JCLrKBXy7NhMSp7k3vteKp5HhDw/exec";
 
   const setupDataUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${setupRange}?key=${apiKey}`;
   const displayDataUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${displayRange}?key=${apiKey}`;

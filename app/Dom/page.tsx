@@ -33,7 +33,7 @@ const Dom: React.FC = () => {
   const timeoutId = useRef<NodeJS.Timeout | null>(null); // Track the timeout for clearing the milestone
 
   const url =
-    "https://script.google.com/macros/s/AKfycbwYvL5mfJg-XCSAptLqPZF805aOKjf5U2vRihZIpFLsT3WmZq6onYIhD4rToftUX68xyw/exec";
+    "https://script.google.com/macros/s/AKfycbwkdYFWoAOXZ0zCbdYRH1wjVrTZxhhKjfj5jjGegL-JCLrKBXy7NhMSp7k3vteKp5HhDw/exec";
 
   // New setupUrl with updated API key and spreadsheet ID
   const setupUrl =

@@ -44,7 +44,7 @@ const LiveStats: React.FC = () => {
   const [primaryColor, setPrimaryColor] = useState<string>("#b31616");
 
   const url =
-    "https://script.google.com/macros/s/AKfycbxIRlSsPO4SFyAKwucj7Dtq70Jf1cqDKw0KquDYP7Wim7Dn5xb2retp197jy5FuDa3ngw/exec";
+    "https://script.google.com/macros/s/AKfycbwkdYFWoAOXZ0zCbdYRH1wjVrTZxhhKjfj5jjGegL-JCLrKBXy7NhMSp7k3vteKp5HhDw/exec";
 
   const sheetApiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/setup!A2:B12?key=${apiKey}`;
 

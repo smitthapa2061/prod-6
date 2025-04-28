@@ -30,7 +30,7 @@ const MatchFragger: React.FC = () => {
 
   // URLs for data fetching
   const url =
-    "https://script.google.com/macros/s/AKfycbxIRlSsPO4SFyAKwucj7Dtq70Jf1cqDKw0KquDYP7Wim7Dn5xb2retp197jy5FuDa3ngw/exec";
+    "https://script.google.com/macros/s/AKfycbwkdYFWoAOXZ0zCbdYRH1wjVrTZxhhKjfj5jjGegL-JCLrKBXy7NhMSp7k3vteKp5HhDw/exec";
 
   const apiKey: string = "AIzaSyD5aSldQht9Aa4Snmf_aYo2jSg2A8bxhws";
   const spreadsheetId: string = "1f1eVMjmhmmgBPxnLI8FGkvhusLzl55jPb4_B8vjjgpo";
