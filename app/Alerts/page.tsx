@@ -123,7 +123,7 @@ const Alerts: React.FC = () => {
     };
 
     fetchData();
-    const intervalId = setInterval(fetchData, 5000);
+    const intervalId = setInterval(fetchData, 500000);
     return () => clearInterval(intervalId);
   }, [url]);
 
@@ -195,13 +195,7 @@ const Alerts: React.FC = () => {
                     style={{
                       backgroundColor: setupData.SECONDARY_COLOR || "#eee",
                     }}
-                    className="bg-black w-[210px] h-[50px] absolute top-[130px] left-[-50px] text-black font-[montserrat] font-bold text-[30px] pl-[10px]"
-                  ></div>
-                  <div
-                    style={{
-                      backgroundColor: setupData.SECONDARY_COLOR || "#eee",
-                    }}
-                    className="bg-black w-[190px] h-[50px] absolute top-[130px] left-[180px] text-black font-[montserrat] font-bold text-[30px] pl-[10px]"
+                    className="bg-black w-[190px] h-[50px] absolute top-[130px] left-[80px] text-black font-[montserrat] font-bold text-[30px] pl-[10px]"
                   >
                     KILLS - {latestDeadTeam.team_kills}
                   </div>

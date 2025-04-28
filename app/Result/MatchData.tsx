@@ -152,7 +152,7 @@ const MatchData: React.FC = () => {
                 <div key={index}>
                   <div className="w-[1980px] h-[1080px]  font-bebas-neue font-[500] text-white relative ">
                     <div
-                      className="bg-red-800 w-[300px] h-[120px]  left-[1140px] absolute top-[30px] text-center text-[50px] "
+                      className="bg-red-800 w-[300px] h-[120px]  left-[820px] absolute top-[30px] text-center text-[50px] "
                       style={{ backgroundColor: primaryColor }}
                     >
                       <div
@@ -165,7 +165,7 @@ const MatchData: React.FC = () => {
                         MATCH - {setupData[4]?.ColumnB}
                       </div>
                     </div>
-                    <div className="text-[150px]   absolute text-white w-[100%] h-[100%] text-center bottom-[20px] right-[230px]">
+                    <div className="text-[150px]   absolute text-white w-[100%] h-[100%] text-center bottom-[20px] right-[550px]">
                       MATCH RANKING
                     </div>
 

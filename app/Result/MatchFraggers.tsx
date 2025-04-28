@@ -95,18 +95,18 @@ const MatchFragger: React.FC = () => {
       exit={{ opacity: 0 }} // Fade out on exit
       transition={{ duration: 2 }}
     >
-      <div className="w-[1920px] h-[1080px] flex font-bebas-neue font-[500]">
-        <div className="m-[-350px] h-[60px] w-[700px] text-[100px] relative top-[350px] scale-150 left-[1050px] text-white">
+      <div className="w-[1920px] h-[1080px] flex font-bebas-neue font-[500] ">
+        <div className="m-[-350px] h-[60px] w-[700px] text-[100px] relative top-[350px] scale-150 left-[650px] text-white">
           MATCH FRAGGERS
         </div>
 
         {/* Copied text from Overall Component */}
         {data2.length > 0 && (
           <div
-            className="absolute top-[170px] left-[370px] text-white bg-red-800 w-[1100px] text-center "
             style={{
               backgroundColor: `${data2[5]?.ColumnB}`,
             }}
+            className="absolute top-[170px] left-[130px] text-white  pl-3 pr-3 text-left "
           >
             <div className="text-[40px] font-[orbitron] font-[800] tracking-wider">
               {data2[2]?.ColumnB} | DAY - {data2[3]?.ColumnB} | MATCH -{" "}
