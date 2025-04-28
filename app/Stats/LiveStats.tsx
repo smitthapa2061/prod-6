@@ -24,7 +24,8 @@ interface Team {
   team_logo: string;
   Alive: number;
   team_kills: number;
-  overall_points?: number; // Add the optional overall_points property
+  overall_points?: number;
+  exclude?: boolean; // <-- ADD THIS
 }
 
 interface GoogleSheetData {
@@ -118,8 +119,12 @@ const LiveStats: React.FC = () => {
   }, [sheetApiUrl]); // Added `sheetApiUrl` as a dependency
 
   const validTeams = matchData.filter(
-    (team) => typeof team.team_name === "string" && team.team_name.trim() !== ""
+    (team) =>
+      typeof team.team_name === "string" &&
+      team.team_name.trim() !== "" &&
+      !team.exclude
   );
+
   const sortedData = validTeams.sort((a: Team, b: Team) => {
     // First, sort by overall_points if available
     if (a.overall_points !== undefined && b.overall_points !== undefined) {
