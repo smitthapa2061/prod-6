@@ -86,10 +86,10 @@ const Overall: React.FC = () => {
 
   useEffect(() => {
     if (data.length === 0) return;
-    const totalPages = Math.ceil(data.length / batchSize);
+    const totalPages = Math.ceil(data.length / batchSize); // removed manual 4 limit
     const interval = setInterval(() => {
       setVisibleColumn((prev) => (prev + 1) % totalPages);
-    }, 40000);
+    }, 40000); // every 40 seconds
     return () => clearInterval(interval);
   }, [data]);
 
@@ -239,7 +239,7 @@ const Overall: React.FC = () => {
         className="flex fixed top-[270px] left-[1290px]"
         width={800}
         height={500}
-        src="https://res.cloudinary.com/dqckienxj/image/upload/v1745194575/Layer_1_j7bfyq.png"
+        src="https://res.cloudinary.com/dqckienxj/image/upload/.png"
         alt="gello"
       />
     </div>
