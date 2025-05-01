@@ -239,8 +239,8 @@ const Overall: React.FC = () => {
         className="flex fixed top-[270px] left-[1290px]"
         width={800}
         height={500}
-        src="https://res.cloudinary.com/dqckienxj/image/upload/.png"
-        alt="gello"
+        src="https://res.cloudinary.com/dqckienxj/image/upload/v1745194575/Layer_1_j7bfyq.png"
+        alt="img"
       />
     </div>
   );
