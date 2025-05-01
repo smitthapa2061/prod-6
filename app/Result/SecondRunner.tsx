@@ -68,9 +68,17 @@ const SecondRunner: React.FC = () => {
           setPrimaryColor(primaryColorValue[1] || "#FF0000");
         }
 
-        const sortedData = uniqueTeams.sort(
-          (a, b) => b.totalpoints - a.totalpoints
-        );
+        const sortedData = uniqueTeams.sort((a, b) => {
+          if (b.totalpoints !== a.totalpoints) {
+            return b.totalpoints - a.totalpoints;
+          } else if (b.rankpoint !== a.rankpoint) {
+            return b.rankpoint - a.rankpoint;
+          } else {
+            return b.totalkills - a.totalkills;
+          }
+        });
+
+        // Select the 3rd ranked team (2nd Runner-Up)
         setTop1(sortedData[2]);
       } catch (err) {
         setError(
