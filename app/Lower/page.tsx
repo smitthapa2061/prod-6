@@ -75,7 +75,7 @@ const Lower = () => {
           style={{ backgroundColor: data.PRIMARY_COLOR }}
         >
           <div
-            className="bg-black text-[2rem] font-bold px-2 py-1 rounded uppercase w-fit tracking-wider absolute top-[-23px] z-[999] right-6 text-black shadow-xl font-[orbitron] skew-x-12"
+            className="bg-black text-[2.5rem] font-[500] px-6  rounded uppercase w-fit tracking-wide absolute top-[-23px] z-[999] right-6 text-black shadow-xl font-[teko] skew-x-12"
             style={{
               backgroundColor: data.SECONDARY_COLOR,
               color: data.TEXT_COLOR_1,
@@ -105,7 +105,7 @@ const Lower = () => {
                 Match {data.MATCHES}
               </div>
               <div
-                className="bg-black text-[1rem] font-bold px-2 py-1 rounded uppercase w-[180px] h-[35px] tracking-widest font-[orbitron] text-center top-[-10px] left-[20px] relative text-black"
+                className="bg-black text-[1.7rem] font-[500]   rounded uppercase w-[180px] h-[35px]  font-[teko] text-center top-[-10px] left-[20px] relative text-black"
                 style={{
                   backgroundColor: data.SECONDARY_COLOR,
                   color: data.TEXT_COLOR_1,
