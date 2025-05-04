@@ -105,7 +105,7 @@ const Alerts: React.FC = () => {
 
                   setTimeout(() => {
                     setLatestDeadTeam(null);
-                  }, 6000);
+                  }, 7000);
                 }
 
                 if (team.Alive > 0) {
@@ -144,7 +144,7 @@ const Alerts: React.FC = () => {
             >
               <div
                 style={{ backgroundColor: setupData.SECONDARY_COLOR }}
-                className="w-[407px] h-[80px] bg-black left-[850px] top-[120px] absolute skew-x-[-17deg] text-black font-[montserrat] font-[700] text-[50px] pl-[30px] "
+                className="w-[307px] h-[70px] bg-black left-[890px] top-[130px] absolute skew-x-[-17deg] text-black font-[teko] font-[700] text-[50px] pl-[30px] "
               >
                 ELIMINATED
               </div>
@@ -152,29 +152,29 @@ const Alerts: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.8 }}
-                className="Rectangle57 flex justify-evenly relative w-[700px] h-[220px] mx-auto top-[200px] "
+                className="Rectangle57 flex justify-evenly relative w-[500px] h-[130px] mx-auto top-[200px]  "
                 style={{
                   background: primaryColor,
                   clipPath:
-                    "polygon(100% 0%, 90% 100%, 10% 100%,-40% 0%, 0% 0%,70% 0%,100% 0%)",
+                    "polygon(100% 0%, 90% 100%, -100% 100%,-100% 0%, 0% 0%,100% 0%,0% 0%)",
                 }}
               >
                 <div
                   style={{
                     clipPath:
-                      "polygon(300% -600%, 90% 90%, 0% 100%,-100% 0%, 0% 0%,-70% -100%,0% 0%)",
+                      "polygon(100% 0%, 80% 100%, -100% 100%,-100% 100%, 0% 100%,0% 100%,20% 0%)",
                   }}
-                  className="bg-white w-[200px] h-[230px] ml-[-136px]"
+                  className="bg-gradient-to-tr from-white to-[#a7a7a7] w-[200px] h-[140px] ml-[-136px] flex justify-center items-center"
                 >
                   <motion.img
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
                     style={{
-                      width: 210,
-                      height: 200,
+                      width: 150,
+                      height: 150,
                     }}
-                    className="border-white mt-[25px]"
+                    className="border-white mt-[-32px] "
                     src={
                       latestDeadTeam.team_logo ||
                       "https://res.cloudinary.com/dqckienxj/image/upload/v1727161524/default_ryi6uf.png"
@@ -187,20 +187,20 @@ const Alerts: React.FC = () => {
                   initial={{ opacity: 0, x: -100 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 1.4 }}
-                  className="text-[6rem] font-bebas-neue h-full flex items-center top-[0px] relative left-[-10px] flex-col text-white"
+                  className="text-[3.5rem] font-bebas-neue h-full flex items-center top-[20px] relative  flex-col text-white"
                   style={{ color: setupData.TEXT_COLOR_2 || "white" }}
                 >
                   TEAM {latestDeadTeam.team_name || "TEAM NAME"}
-                  <div
-                    style={{
-                      backgroundColor: setupData.SECONDARY_COLOR || "#eee",
-                    }}
-                    className="bg-black w-[190px] h-[50px] absolute top-[130px] left-[80px] text-black font-[montserrat] font-bold text-[30px] pl-[10px]"
-                  >
-                    KILLS - {latestDeadTeam.team_kills}
-                  </div>
                 </motion.div>
               </motion.div>
+              <div
+                style={{
+                  backgroundColor: setupData.SECONDARY_COLOR || "#eee",
+                }}
+                className="w-[270px] h-[60px] bg-black left-[856px] top-[320px] absolute skew-x-[-17deg] text-black font-[teko] font-[600] text-[40px] pl-[30px] "
+              >
+                TOTAL KILLS - {latestDeadTeam.team_kills}
+              </div>
             </motion.div>
           </div>
         )}

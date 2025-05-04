@@ -132,11 +132,17 @@ const LiveStats: React.FC = () => {
       if (a.overall_points < b.overall_points) return 1;
     }
 
-    // If overall_points are the same, sort by Alive status, with alive teams coming first
+    // Sorting by Alive status:
+    // - Alive teams come first
+    // - Dead teams (Alive === 0) come below
+    // - Missed teams (Alive === -1) come below dead teams
+
+    if (a.Alive === -1 && b.Alive !== -1) return 1; // Missed team goes below
+    if (a.Alive !== -1 && b.Alive === -1) return -1; // Alive team stays on top
     if (a.Alive === 0 && b.Alive !== 0) return 1; // Dead team goes below
     if (a.Alive !== 0 && b.Alive === 0) return -1; // Alive team stays on top
 
-    return 0; // If both Alive or both Dead, no change in their relative order
+    return 0; // If both have same Alive status, no change in their relative order
   });
 
   if (loading) return <p>Loading...</p>;
@@ -182,13 +188,12 @@ const LiveStats: React.FC = () => {
               >
                 <div
                   style={{
+                    opacity: team.Alive === 0 || team.Alive === -1 ? 0.5 : 1,
                     backgroundColor: setupData?.PRIMARY_COLOR,
                     clipPath:
                       "polygon(5% 0%, 100% 0%, 100% 100%, 0% 100%, 30% 30%, 0% 60%)",
                   }}
-                  className={`text-white text-[35px] flex text-center justify-center items-center w-[60px] mt-[px]   ${
-                    team.Alive === 0 ? "opacity-50" : "opacity-100"
-                  }`}
+                  className={`text-white text-[35px] flex text-center justify-center items-center w-[60px] mt-[px]  `}
                 >
                   {index + 1}
                 </div>
@@ -201,7 +206,7 @@ const LiveStats: React.FC = () => {
                   <div
                     style={{
                       backgroundColor: setupData?.SECONDARY_COLOR,
-                      opacity: 20,
+                      opacity: team.Alive === 0 || team.Alive === -1 ? 0.5 : 1,
                     }}
                     className="w-[50px] h-[50px] absolute z-10 border-r-[2px] border-black"
                   >
@@ -218,14 +223,23 @@ const LiveStats: React.FC = () => {
                   <div className="bg-white w-[120px] h-[80px] absolute left-[50px] top-[0px]"></div>
                   <div
                     className="text-[35px] w-[200px] h-[500px]  absolute left-[54px]"
-                    style={{ opacity: team.Alive === 0 ? 0.5 : 1 }}
+                    style={{
+                      opacity: team.Alive === 0 || team.Alive === -1 ? 0.5 : 1,
+                    }}
                   >
                     {team.team_name}
                   </div>
                 </div>
 
-                <div className="absolute left-[240px] flex gap-[4px] mt-[7px] skew-y-6 ">
-                  {team.Alive === 0 ? (
+                <div className="absolute left-[240px] flex gap-[4px] mt-[7px] skew-y-6">
+                  {team.Alive === -1 ? (
+                    <div
+                      style={{ opacity: team.Alive === -1 ? 0.5 : 1 }}
+                      className="text-white text-[20px] font-bold"
+                    >
+                      MISS
+                    </div>
+                  ) : team.Alive === 0 ? (
                     <div className="w-[50px] h-[50px] absolute top-[-5px] opacity-[70%]">
                       <Image
                         src={Dead.src as string}
@@ -243,7 +257,7 @@ const LiveStats: React.FC = () => {
                           backgroundColor:
                             index < team.Alive
                               ? `${setupData?.SECONDARY_COLOR}`
-                              : "#FF0000", // white if alive, red if not
+                              : "#FF0000",
                         }}
                       ></div>
                     ))
@@ -252,13 +266,17 @@ const LiveStats: React.FC = () => {
 
                 <div
                   className="absolute left-[300px] text-white text-[35px] mt-[1px] flex items-center justify-center w-[50px] h-[50px]"
-                  style={{ opacity: team.Alive === 0 ? 0.5 : 1 }}
+                  style={{
+                    opacity: team.Alive === 0 || team.Alive === -1 ? 0.5 : 1, // Apply opacity for both dead and miss
+                  }}
                 >
                   {team.team_kills}
                 </div>
                 <div
                   className="absolute left-[364px] text-white text-[35px] mt-[1px] flex items-center justify-center w-[50px] h-[50px]"
-                  style={{ opacity: team.Alive === 0 ? 0.5 : 1 }}
+                  style={{
+                    opacity: team.Alive === 0 || team.Alive === -1 ? 0.5 : 1, // Apply opacity for both dead and miss
+                  }}
                 >
                   {team.overall_points}
                 </div>
