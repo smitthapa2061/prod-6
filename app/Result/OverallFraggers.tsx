@@ -115,7 +115,7 @@ const Fragger: React.FC = () => {
       exit={{ opacity: 0 }} // Fade out on exit
       transition={{ duration: 2 }}
     >
-      <div className="w-[1920px] h-[1080px] flex font-bebas-neue font-[500] ">
+      <div className="w-[1920px] h-[1080px] flex font-[teko] font-[500] ">
         <div className="text-white text-[150px] absolute left-[70px] top-[-20px]">
           OVERALL FRAGGERS
         </div>

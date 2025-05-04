@@ -103,8 +103,7 @@ const SecondRunner: React.FC = () => {
                   initial={{ x: -800 }}
                   animate={{ x: 0 }}
                   transition={{ duration: 0.5 + index * 0.2 }}
-                  className="w-[800px] relative top-[40px]"
-                  style={{ right: `${16 + 258 * index}px` }}
+                  className="w-[800px] relative top-[40px] ml-[-145px] mr-[-190px]"
                   src={
                     player.player_photo ||
                     "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"

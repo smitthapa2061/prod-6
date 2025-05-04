@@ -66,9 +66,17 @@ const SecondRunner: React.FC = () => {
           setPrimaryColor(primaryColorValue[1] || "#FF0000");
         }
 
-        const sortedData = uniqueTeams.sort(
-          (a, b) => b.totalpoints - a.totalpoints
-        );
+        const sortedData = uniqueTeams.sort((a, b) => {
+          if (b.totalpoints !== a.totalpoints) {
+            return b.totalpoints - a.totalpoints;
+          } else if (b.rankpoint !== a.rankpoint) {
+            return b.rankpoint - a.rankpoint;
+          } else {
+            return b.totalkills - a.totalkills;
+          }
+        });
+
+        // Select the 3rd ranked team (2nd Runner-Up)
         setTop1(sortedData[0]);
       } catch (err) {
         setError(
@@ -103,8 +111,7 @@ const SecondRunner: React.FC = () => {
                   initial={{ x: -800 }}
                   animate={{ x: 0 }}
                   transition={{ duration: 0.5 + index * 0.2 }}
-                  className="w-[800px] relative top-[40px]"
-                  style={{ right: `${16 + 258 * index}px` }}
+                  className="w-[800px] relative top-[40px] ml-[-200px] mr-[-100px]"
                   src={
                     player.player_photo ||
                     "https://res.cloudinary.com/dqckienxj/image/upload/v1735762279/defult_chach_apsjhc_dwnd7n.png"
