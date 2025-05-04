@@ -9,6 +9,7 @@ interface LowerData {
   DAY: string;
   MATCHES: string;
   PRIMARY_COLOR: string;
+  DAY_NAME: string;
   SECONDARY_COLOR: string;
   TEXT_COLOR_1: string;
   TEXT_COLOR_2: string;
@@ -40,6 +41,7 @@ const Lower = () => {
           TOR_LOGO: values[1] ? values[1][1] : "",
           ROUND: values[2] ? values[2][1] : "",
           DAY: values[3] ? values[3][1] : "",
+          DAY_NAME: values[3] ? values[3][0] : "", // ← New value
           MATCHES: values[4] ? values[4][1] : "",
           PRIMARY_COLOR: values[5] ? values[5][1] : "",
           SECONDARY_COLOR: values[6] ? values[6][1] : "",
@@ -109,7 +111,7 @@ const Lower = () => {
                   color: data.TEXT_COLOR_1,
                 }}
               >
-                DAY {data.DAY}
+                {data.DAY_NAME} - {data.DAY}
               </div>
             </div>
           </div>
