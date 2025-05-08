@@ -105,7 +105,7 @@ const Alerts: React.FC = () => {
 
                   setTimeout(() => {
                     setLatestDeadTeam(null);
-                  }, 700000);
+                  }, 7000);
                 }
 
                 if (team.Alive > 0) {
