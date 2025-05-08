@@ -114,7 +114,7 @@ const LiveStats: React.FC = () => {
 
     fetchSetupData();
     fetchData();
-    const intervalId = setInterval(fetchData, 6000);
+    const intervalId = setInterval(fetchData, 7500);
     return () => clearInterval(intervalId);
   }, [sheetApiUrl]); // Added `sheetApiUrl` as a dependency
 

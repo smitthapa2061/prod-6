@@ -105,7 +105,7 @@ const Alerts: React.FC = () => {
 
                   setTimeout(() => {
                     setLatestDeadTeam(null);
-                  }, 7000);
+                  }, 700000);
                 }
 
                 if (team.Alive > 0) {
@@ -133,7 +133,7 @@ const Alerts: React.FC = () => {
 
   return (
     <>
-      <div className="w-[1920px] h-[1080px] absolute  ">
+      <div className="w-[1920px] h-[1080px] absolute   scale-150">
         {latestDeadTeam && (
           <div className="">
             <motion.div
@@ -144,7 +144,7 @@ const Alerts: React.FC = () => {
             >
               <div
                 style={{ backgroundColor: setupData.SECONDARY_COLOR }}
-                className="w-[307px] h-[70px] bg-black left-[890px] top-[130px] absolute skew-x-[-17deg] text-black font-[teko] font-[700] text-[50px] pl-[30px] "
+                className="w-[307px] h-[70px] bg-black left-[890px] top-[380px] absolute skew-x-[-17deg] text-black font-[teko] font-[700] text-[50px] pl-[30px] "
               >
                 ELIMINATED
               </div>
@@ -152,7 +152,7 @@ const Alerts: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.8 }}
-                className="Rectangle57 flex justify-evenly relative w-[500px] h-[130px] mx-auto top-[200px]  "
+                className="Rectangle57 flex justify-evenly relative w-[550px] h-[130px] mx-auto top-[450px]  "
                 style={{
                   background: primaryColor,
                   clipPath:
@@ -164,7 +164,7 @@ const Alerts: React.FC = () => {
                     clipPath:
                       "polygon(100% 0%, 80% 100%, -100% 100%,-100% 100%, 0% 100%,0% 100%,20% 0%)",
                   }}
-                  className="bg-gradient-to-tr from-white to-[#a7a7a7] w-[200px] h-[140px] ml-[-136px] flex justify-center items-center"
+                  className="bg-gradient-to-tr from-white to-[#a7a7a7] w-[270px] h-[340px] relative right-[150px] flex justify-center items-center"
                 >
                   <motion.img
                     initial={{ opacity: 0 }}
@@ -174,7 +174,7 @@ const Alerts: React.FC = () => {
                       width: 150,
                       height: 150,
                     }}
-                    className="border-white mt-[-32px] "
+                    className="border-white mt-[-190px] "
                     src={
                       latestDeadTeam.team_logo ||
                       "https://res.cloudinary.com/dqckienxj/image/upload/v1727161524/default_ryi6uf.png"
@@ -187,7 +187,7 @@ const Alerts: React.FC = () => {
                   initial={{ opacity: 0, x: -100 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 1.4 }}
-                  className="text-[3.5rem] font-bebas-neue h-full flex items-center top-[20px] relative  flex-col text-white"
+                  className="text-[4rem] font-bebas-neue h-full flex items-center top-[20px] relative left-[-100px] flex-col text-white"
                   style={{ color: setupData.TEXT_COLOR_2 || "white" }}
                 >
                   TEAM {latestDeadTeam.team_name || "TEAM NAME"}
@@ -197,7 +197,7 @@ const Alerts: React.FC = () => {
                 style={{
                   backgroundColor: setupData.SECONDARY_COLOR || "#eee",
                 }}
-                className="w-[270px] h-[60px] bg-black left-[856px] top-[320px] absolute skew-x-[-17deg] text-black font-[teko] font-[600] text-[40px] pl-[30px] "
+                className="w-[270px] h-[60px] bg-black left-[880px] top-[570px] absolute skew-x-[-17deg] text-black font-[teko] font-[600] text-[40px] pl-[30px] "
               >
                 TOTAL KILLS - {latestDeadTeam.team_kills}
               </div>
