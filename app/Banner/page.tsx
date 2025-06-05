@@ -154,7 +154,7 @@ const Banner: React.FC = () => {
   }
 
   return (
-    <div className="w-[1920px] h-[1080px]  flex items-end">
+    <div className="w-[1920px] h-[1080px] ">
    
     <div
   className="w-[1920px] h-[230px]"
@@ -182,7 +182,7 @@ className="w-[240px] h-[230px] ml-[20px]">
   <img src= {setupData?.TOR_LOGO} alt="" />
   
 </div>
-<div className="w-[2500px] flex flex-wrap justify-start items-start gap-x-[10px] gap-y-[10px] px-[120px] py-[10px] scale-75 absolute left-[-120px] top-[870px]">
+<div className="w-[2500px] flex flex-wrap justify-start items-start gap-x-[10px] gap-y-[10px] px-[120px] py-[10px] scale-75 absolute left-[-120px] top-[13px]">
   {sortedData.map((team, index) => (
     <div
       key={index}
