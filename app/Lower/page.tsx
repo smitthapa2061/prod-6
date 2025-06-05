@@ -111,7 +111,7 @@ const Lower = () => {
                   color: data.TEXT_COLOR_1,
                 }}
               >
-                {data.DAY_NAME} - {data.DAY}
+                {data.DAY_NAME} - {data.DAY} 
               </div>
             </div>
           </div>
