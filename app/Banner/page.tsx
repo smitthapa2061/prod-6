@@ -154,7 +154,7 @@ const Banner: React.FC = () => {
   }
 
   return (
-    <div className="w-[1920px] h-[1080px] absolute top-[350px] ">
+    <div className="w-[1920px] h-[1080px] absolute top-[360px] ">
    
     <div
   className="w-[1920px] h-[230px]"
